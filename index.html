@@ -3,122 +3,472 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bangla Episode | Live IPTV</title>
-  <!-- Tabler Icons -->
+  <title>StreamBD - Live IPTV</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-  <!-- HLS.js -->
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
   <style>
-    /* বেসিক রিসেট */
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #0a0a0f; color: #e8e8f0; min-height: 100vh; }
-    .app { display: flex; flex-direction: column; height: 100vh; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:sans-serif;background:#0a0a0f;color:#e8e8f0;min-height:100vh}
+  .app{display:flex;flex-direction:column;min-height:100vh;background:#0a0a0f}
+  .topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;background:#111118;border-bottom:0.5px solid rgba(255,255,255,0.08)}
+  .logo{font-size:18px;font-weight:500;color:#a78bfa;letter-spacing:-0.3px}
+  .logo span{color:#e8e8f0}
+  .nav{display:flex;gap:6px}
+  .nav-btn{background:transparent;border:none;color:#888;font-size:13px;padding:6px 14px;border-radius:6px;cursor:pointer;transition:all 0.15s}
+  .nav-btn.active{background:#1e1e2e;color:#a78bfa}
+  .nav-btn:hover:not(.active){color:#e8e8f0;background:#1a1a28}
+  .search-bar{display:flex;align-items:center;gap:8px;background:#1a1a28;border:0.5px solid rgba(255,255,255,0.1);border-radius:8px;padding:6px 12px}
+  .search-bar input{background:transparent;border:none;outline:none;color:#e8e8f0;font-size:13px;width:160px}
+  .search-bar input::placeholder{color:#555}
+  .main{display:flex;flex:1;gap:0;overflow:hidden;}
+  .sidebar{width:240px;background:#0e0e18;border-right:0.5px solid rgba(255,255,255,0.07);padding:16px 0;flex-shrink:0;overflow-y:auto;height:calc(100vh - 60px);}
+  
+  /* কাস্টম স্ক্রলবার সাইডবারের জন্য */
+  .sidebar::-webkit-scrollbar {width: 6px;}
+  .sidebar::-webkit-scrollbar-track {background: transparent;}
+  .sidebar::-webkit-scrollbar-thumb {background: rgba(255,255,255,0.1); border-radius: 10px;}
+  .sidebar::-webkit-scrollbar-thumb:hover {background: rgba(255,255,255,0.2);}
 
-    /* টপবার */
-    .topbar { padding: 15px 24px; background: #111118; border-bottom: 0.5px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between; }
-    .logo { font-size: 20px; font-weight: 600; color: #a78bfa; letter-spacing: -0.5px; }
+  .sidebar-section{margin-bottom:24px}
+  .sidebar-title{font-size:10px;font-weight:500;color:#555;letter-spacing:0.8px;text-transform:uppercase;padding:0 16px;margin-bottom:8px}
+  .channel-item{display:flex;align-items:center;gap:10px;padding:8px 16px;cursor:pointer;transition:background 0.1s;border-left:2px solid transparent}
+  .channel-item:hover{background:rgba(167,139,250,0.06)}
+  .channel-item.active{background:rgba(167,139,250,0.1);border-left:2px solid #a78bfa}
+  .channel-logo{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0}
+  .ch-name{font-size:13px;color:#c8c8d8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .ch-live{font-size:10px;color:#22c55e;background:rgba(34,197,94,0.12);padding:1px 6px;border-radius:4px;margin-left:auto}
+  .content{flex:1;padding:20px;overflow-y:auto;min-width:0;height:calc(100vh - 60px);}
+  
+  /* প্লেয়ার সেকশন সাইজ ঠিক করা হয়েছে */
+  .player-section{background:#111118;border-radius:12px;overflow:hidden;margin-bottom:20px;border:0.5px solid rgba(255,255,255,0.07);max-width:900px;margin:0 auto 20px auto}
+  .player-wrap{position:relative;background:#000;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;cursor:pointer;max-height:480px}
+  
+  video {position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:1;background:#000}
+  
+  .player-bg{position:absolute;inset:0;background:linear-gradient(135deg,#1a0a2e,#0a1628);z-index:0}
+  .play-btn{position:relative;z-index:2;width:64px;height:64px;background:rgba(167,139,250,0.2);border:1.5px solid rgba(167,139,250,0.4);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+  .play-btn:hover{background:rgba(167,139,250,0.35);transform:scale(1.05)}
+  .play-btn i{font-size:24px;color:#a78bfa;margin-left:4px}
+  .now-playing-badge{position:absolute;top:12px;left:12px;z-index:2;background:rgba(239,68,68,0.85);color:#fff;font-size:11px;font-weight:500;padding:3px 8px;border-radius:4px;display:flex;align-items:center;gap:4px}
+  .live-dot{width:6px;height:6px;background:#fff;border-radius:50%;animation:blink 1s infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+  .player-info{position:absolute;bottom:0;left:0;right:0;padding:12px 16px;background:linear-gradient(0deg,rgba(0,0,0,0.8),transparent);z-index:2}
+  .player-title{font-size:14px;font-weight:500;color:#fff}
+  .player-sub{font-size:12px;color:rgba(255,255,255,0.6);margin-top:2px}
+  .controls{display:flex;align-items:center;gap:12px;padding:10px 16px;background:#151520}
+  .ctrl-btn{background:transparent;border:none;color:#888;cursor:pointer;display:flex;align-items:center;font-size:18px;padding:4px;border-radius:4px;transition:color 0.15s}
+  .ctrl-btn:hover{color:#a78bfa}
+  .progress-wrap{flex:1;display:flex;flex-direction:column;gap:4px}
+  .progress-bar{height:3px;background:rgba(255,255,255,0.12);border-radius:2px;cursor:pointer;position:relative}
+  .progress-fill{height:100%;width:100%;background:#a78bfa;border-radius:2px;position:relative}
+  .time{font-size:11px;color:#555;display:flex;justify-content:space-between}
+  .vol-row{display:flex;align-items:center;gap:6px;margin-left:auto}
+  .vol-bar{width:60px;height:3px;background:rgba(255,255,255,0.12);border-radius:2px;cursor:pointer}
+  .vol-fill{width:70%;height:100%;background:#a78bfa;border-radius:2px}
+  .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .section-title{font-size:15px;font-weight:500;color:#e8e8f0}
+  .see-all{font-size:12px;color:#a78bfa;background:transparent;border:none;cursor:pointer}
+  .cards-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-bottom:24px}
+  .vod-card{border-radius:8px;overflow:hidden;cursor:pointer;transition:transform 0.15s;position:relative;background:#1a1a28;border:0.5px solid rgba(255,255,255,0.07)}
+  .vod-card:hover{transform:translateY(-2px)}
+  .vod-thumb{aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;font-size:28px;position:relative}
+  .vod-badge{position:absolute;top:6px;right:6px;font-size:10px;padding:2px 6px;border-radius:3px;font-weight:500}
+  .badge-hd{background:rgba(59,130,246,0.8);color:#fff}
+  .badge-new{background:rgba(34,197,94,0.8);color:#fff}
+  .vod-info{padding:8px 10px}
+  .vod-title{font-size:12px;font-weight:500;color:#d8d8e8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .vod-meta{font-size:11px;color:#555;margin-top:2px}
+  .epg-row{display:flex;gap:8px;margin-bottom:20px;overflow-x:auto;padding-bottom:4px}
+  .epg-item{flex-shrink:0;background:#1a1a28;border-radius:6px;padding:8px 12px;border:0.5px solid rgba(255,255,255,0.07);min-width:120px}
+  .epg-time{font-size:10px;color:#a78bfa;margin-bottom:3px}
+  .epg-show{font-size:12px;color:#c8c8d8;font-weight:500}
+  .epg-ch{font-size:10px;color:#555}
+  .epg-item.current{border-color:rgba(167,139,250,0.3);background:rgba(167,139,250,0.08)}
 
-    /* মেইন লেআউট */
-    .main { display: flex; flex: 1; overflow: hidden; }
-
-    /* সাইডবার ডিজাইন */
-    .sidebar { width: 280px; background: #0e0e18; border-right: 0.5px solid rgba(255,255,255,0.07); overflow-y: auto; height: 100%; padding: 20px 0; }
-    .sidebar-section { margin-bottom: 25px; }
-    .sidebar-title { font-size: 11px; font-weight: 700; color: #666; padding: 0 20px 10px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .channel-item { display: flex; align-items: center; gap: 12px; padding: 10px 20px; cursor: pointer; transition: 0.2s; border-left: 3px solid transparent; }
-    .channel-item:hover { background: rgba(167,139,250,0.05); }
-    .channel-item.active { background: rgba(167,139,250,0.1); border-left-color: #a78bfa; color: #a78bfa; }
-    .channel-logo { width: 30px; height: 30px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; }
-    .ch-name { font-size: 13px; }
-
-    /* কন্টেন্ট এরিয়া */
-    .content { flex: 1; padding: 30px; overflow-y: auto; display: flex; justify-content: center; align-items: flex-start; }
-    .player-section { width: 100%; max-width: 900px; background: #000; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-    video { width: 100%; aspect-ratio: 16/9; background: #000; outline: none; }
-
-    /* রেসপন্সিভ */
-    @media (max-width: 767px) {
-      .main { flex-direction: column; }
-      .sidebar { width: 100%; height: 300px; order: 2; }
-      .content { padding: 15px; order: 1; }
+  /* 📱 মোবাইল রেসপন্সিভ ফিক্স (শুধুমাত্র ছোট স্ক্রিনের জন্য) */
+  @media (max-width: 767px) {
+    .app {
+      flex-direction: column;
+      height: auto;
+      min-height: 100vh;
     }
+    .main {
+      flex-direction: column;
+      overflow: visible;
+      height: auto;
+    }
+    .sidebar {
+      width: 100%;
+      height: 320px; /* মোবাইলে চ্যানেল লিস্টের উচ্চতা */
+      border-right: none;
+      border-top: 0.5px solid rgba(255,255,255,0.07);
+      order: 2; /* চ্যানেল লিস্ট প্লেয়ারের নিচে চলে যাবে */
+    }
+    .content {
+      width: 100%;
+      height: auto;
+      padding: 12px;
+      order: 1; /* ভিডিও প্লেয়ার সবার উপরে থাকবে */
+    }
+    .player-section {
+      max-width: 100%;
+      margin-bottom: 16px;
+    }
+    .player-wrap {
+      aspect-ratio: 16/9;
+    }
+    .topbar {
+      padding: 12px 16px;
+    }
+    .nav {
+      gap: 2px;
+    }
+    .nav-btn {
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+    .search-bar {
+      display: none; /* মোবাইলে জায়গা বাঁচানোর জন্য সার্চ বার লুকানো হলো */
+    }
+  }
   </style>
 </head>
 <body>
 
 <div class="app">
   <div class="topbar">
-    <div class="logo">Bangla Episode</div>
+    <div class="logo">Stream<span>BD</span></div>
+    <div class="nav">
+      <button class="nav-btn active" onclick="setTab(this,'live')"><i class="ti ti-live-photo"></i> Live TV</button>
+      <button class="nav-btn" onclick="setTab(this,'vod')"><i class="ti ti-movie"></i> Movies</button>
+      <button class="nav-btn" onclick="setTab(this,'series')"><i class="ti ti-device-tv"></i> Series</button>
+    </div>
+    <div class="search-bar">
+      <i class="ti ti-search" style="color:#555;font-size:15px"></i>
+      <input type="text" placeholder="চ্যানেল বা মুভি খুঁজুন...">
+    </div>
   </div>
 
   <div class="main">
     <div class="sidebar">
-      
-      <!-- ১. সংবাদ বিভাগ -->
       <div class="sidebar-section">
-        <div class="sidebar-title">সংবাদ (News)</div>
-        <div class="channel-item" onclick="selectChannel(this, 'Somoy News', 'https://tvsen6.aynaott.com/somoytv/index.m3u8?e=1779283766&u=78be6644-0a65-48ec-81a4-089ac65a2619&token=269246b8a31fb3a656624d71e10e447d')">
-          <div class="channel-logo" style="background:#1e3a8a; color:#60a5fa">ST</div>
-          <span class="ch-name">Somoy News</span>
-        </div>
-      </div>
+        <div class="sidebar-title">সব চ্যানেল (All Channels)</div>
 
-      <!-- ২. বিনোদন বিভাগ -->
-      <div class="sidebar-section">
-        <div class="sidebar-title">বিনোদন (Entertainment)</div>
-        <div class="channel-item active" onclick="selectChannel(this, 'Ananda TV', 'https://tvsen6.aynaott.com/anandatv/index.m3u8?e=1779283759&u=78be6644-0a65-48ec-81a4-089ac65a2619&token=504b9350b4703116ca4ab20e4013288e')">
-          <div class="channel-logo" style="background:#4c1d95; color:#a78bfa">AT</div>
+        <div class="channel-item active" onclick="selectChannel(this, 'Ananda TV', 'Bangla', 'https://tvsen6.aynaott.com/anandatv/index.m3u8?e=1779283759&u=78be6644-0a65-48ec-81a4-089ac65a2619&token=504b9350b4703116ca4ab20e4013288e')">
+          <div class="channel-logo" style="background:#2d1b4e;color:#a78bfa">AT</div>
           <span class="ch-name">Ananda TV</span>
+          <span class="ch-live">LIVE</span>
         </div>
-        <div class="channel-item" onclick="selectChannel(this, 'Deepto TV', 'https://tvsen5.aynaott.com/DeeptoTVHD/index.m3u8?e=1779283753&u=78be6644-0a65-48ec-81a4-089ac65a2619&token=12455a1472f0cbf29e22967cc44a49c0')">
-          <div class="channel-logo" style="background:#064e3b; color:#34d399">DT</div>
+
+        <div class="channel-item" onclick="selectChannel(this, 'Bangla TV', 'Bangla', 'https://tvsen6.aynaott.com/banglatv/index.m3u8?e=1779283758&u=78be6644-0a65-48ec-81a4-089ac65a2619&token=f3e9e2737e35147900c0f4add619ead6')">
+          <div class="channel-logo" style="background:#0a1e3d;color:#60a5fa">BT</div>
+          <span class="ch-name">Bangla TV</span>
+          <span class="ch-live">LIVE</span>
+        </div>
+
+        <div class="channel-item" onclick="selectChannel(this, 'Channel 9', 'Bangla', 'https://tvsen6.aynaott.com/channel9/index.m3u8?e=1779283756&u=78be6644-0a65-48ec-81a4-089ac65a2619&token=6d1662351f39dd5277df069a01f46fee')">
+          <div class="channel-logo" style="background:#2d0a0a;color:#f87171">C9</div>
+          <span class="ch-name">Channel 9</span>
+          <span class="ch-live">LIVE</span>
+        </div>
+
+        <div class="channel-item" onclick="selectChannel(this, 'Duronto TV', 'Bangla', 'https://tvsen6.aynaott.com/durontotv-live/index.m3u8?e=1779283757&u=78be6644-0a65-48ec-81a4-089ac65a2619&token=3da514e08a15c80daed60a18b3f423fa')">
+          <div class="channel-logo" style="background:#2a1e00;color:#fbbf24">DT</div>
+          <span class="ch-name">Duronto TV</span>
+          <span class="ch-live">LIVE</span>
+        </div>
+
+        <div class="channel-item" onclick="selectChannel(this, 'Boishakhi TV', 'Bangla', 'https://tvsen6.aynaott.com/boishakhitv/index.m3u8?e=1779283755&u=78be6644-0a65-48ec-81a4-089ac65a2619&token=f3f4ec98ffbd9567c21e8b2ee98e32d5')">
+          <div class="channel-logo" style="background:#0a2d1a;color:#4ade80">BT</div>
+          <span class="ch-name">Boishakhi TV</span>
+          <span class="ch-live">LIVE</span>
+        </div>
+
+        <div class="channel-item" onclick="selectChannel(this, 'Desh TV', 'Bangla', 'https://tvsen6.aynaott.com/deshtv/index.m3u8?e=1779283755&u=78be6644-0a65-48ec-81a4-089ac65a2619&token=9cf4584fd86e1427935f23b30fd28799')">
+          <div class="channel-logo" style="background:#1a0a2e;color:#c084fc">DT</div>
+          <span class="ch-name">Desh TV</span>
+          <span class="ch-live">LIVE</span>
+        </div>
+
+        <div class="channel-item" onclick="selectChannel(this, 'RTV', 'Bangla', 'https://tvsen5.aynaott.com/RtvHD/index.m3u8?e=1779283751&u=78be6644-0a65-48ec-81a4-089ac65a2619&token=678f1f8ec03b1af7b76d013d33f45198')">
+          <div class="channel-logo" style="background:#0a1e1e;color:#2dd4bf">RT</div>
+          <span class="ch-name">RTV</span>
+          <span class="ch-live">LIVE</span>
+        </div>
+
+        <div class="channel-item" onclick="selectChannel(this, 'ATN Bangla', 'Bangla', 'https://tvsen5.aynaott.com/atnbangla/index.m3u8?e=1779283752&u=78be6644-0a65-48ec-81a4-089ac65a2619&token=e20058ae495a80a83ec09cb9d82b9253')">
+          <div class="channel-logo" style="background:#2d1b4e;color:#a78bfa">AB</div>
+          <span class="ch-name">ATN Bangla</span>
+          <span class="ch-live">LIVE</span>
+        </div>
+
+        <div class="channel-item" onclick="selectChannel(this, 'Bangla Vision', 'Bangla', 'https://tvsen5.aynaott.com/banglavision/index.m3u8?e=1779283750&u=78be6644-0a65-48ec-81a4-089ac65a2619&token=c6bb7760d6eb9b999205a81ca4f4f51c')">
+          <div class="channel-logo" style="background:#0a1e3d;color:#60a5fa">BV</div>
+          <span class="ch-name">Bangla Vision</span>
+          <span class="ch-live">LIVE</span>
+        </div>
+
+        <div class="channel-item" onclick="selectChannel(this, 'Channel I', 'Bangla', 'https://tvsen6.aynaott.com/channeli/index.m3u8?e=1779283749&u=78be6644-0a65-48ec-81a4-089ac65a2619&token=1d2782c406bc6c9f853716c3dc41a439')">
+          <div class="channel-logo" style="background:#2d0a0a;color:#f87171">CI</div>
+          <span class="ch-name">Channel I</span>
+          <span class="ch-live">LIVE</span>
+        </div>
+
+        <div class="channel-item" onclick="selectChannel(this, 'Asian TV', 'Bangla', 'https://tvsen6.aynaott.com/asiantv/index.m3u8?e=1779283756&u=78be6644-0a65-48ec-81a4-089ac65a2619&token=46e2c2d74460202bdd6638ed54273e2a')">
+          <div class="channel-logo" style="background:#2a1e00;color:#fbbf24">AT</div>
+          <span class="ch-name">Asian TV</span>
+          <span class="ch-live">LIVE</span>
+        </div>
+
+        <div class="channel-item" onclick="selectChannel(this, 'NTV', 'Bangla', 'https://tvsen5.aynaott.com/ntvbd/index.m3u8?e=1779283750&u=78be6644-0a65-48ec-81a4-089ac65a2619&token=dac30ebda5dba60e895e85ddee645992')">
+          <div class="channel-logo" style="background:#0a2d1a;color:#4ade80">NT</div>
+          <span class="ch-name">NTV</span>
+          <span class="ch-live">LIVE</span>
+        </div>
+
+        <div class="channel-item" onclick="selectChannel(this, 'Global TV', 'Bangla', 'https://tvsen6.aynaott.com/globaltvhd/index.m3u8?e=1779283760&u=78be6644-0a65-48ec-81a4-089ac65a2619&token=9877fe1456ffd7b4e155ff0dc042c176')">
+          <div class="channel-logo" style="background:#1a0a2e;color:#c084fc">GT</div>
+          <span class="ch-name">Global TV</span>
+          <span class="ch-live">LIVE</span>
+        </div>
+
+        <div class="channel-item" onclick="selectChannel(this, 'Mohona TV', 'Bangla', 'https://tvsen6.aynaott.com/mohonatv/index.m3u8?e=1779283762&u=78be6644-0a65-48ec-81a4-089ac65a2619&token=017ac949515fd9b0181090287f362d2b')">
+          <div class="channel-logo" style="background:#0a1e1e;color:#2dd4bf">MT</div>
+          <span class="ch-name">Mohona TV</span>
+          <span class="ch-live">LIVE</span>
+        </div>
+
+        <div class="channel-item" onclick="selectChannel(this, 'Maasranga TV', 'Bangla', 'https://tvsen5.aynaott.com/maasrangatv/index.m3u8?e=1779283753&u=78be6644-0a65-48ec-81a4-089ac65a2619&token=d29aadd6d2d6f7a0a28fabc7830ae6e3')">
+          <div class="channel-logo" style="background:#2d1b4e;color:#a78bfa">MT</div>
+          <span class="ch-name">Maasranga TV</span>
+          <span class="ch-live">LIVE</span>
+        </div>
+
+        <div class="channel-item" onclick="selectChannel(this, 'NEXUS TV', 'Bangla', 'https://tvsen6.aynaott.com/nexustv/index.m3u8?e=1779283761&u=78be6644-0a65-48ec-81a4-089ac65a2619&token=bbcba35ac711c3545a56b3580503ee00')">
+          <div class="channel-logo" style="background:#0a1e3d;color:#60a5fa">NX</div>
+          <span class="ch-name">NEXUS TV</span>
+          <span class="ch-live">LIVE</span>
+        </div>
+
+        <div class="channel-item" onclick="selectChannel(this, 'SA TV', 'Bangla', 'https://tvsen6.aynaott.com/satv/index.m3u8?e=1779283757&u=78be6644-0a65-48ec-81a4-089ac65a2619&token=336f19de5e4aacae753d7524d86d1a89')">
+          <div class="channel-logo" style="background:#2d0a0a;color:#f87171">SA</div>
+          <span class="ch-name">SA TV</span>
+          <span class="ch-live">LIVE</span>
+        </div>
+
+        <div class="channel-item" onclick="selectChannel(this, 'ETV', 'Bangla', 'https://tvsen6.aynaott.com/etv/index.m3u8?e=1779283752&u=78be6644-0a65-48ec-81a4-089ac65a2619&token=2c4b5c7a7044076e38b667d37971baec')">
+          <div class="channel-logo" style="background:#2a1e00;color:#fbbf24">ET</div>
+          <span class="ch-name">ETV</span>
+          <span class="ch-live">LIVE</span>
+        </div>
+
+        <div class="channel-item" onclick="selectChannel(this, 'Bijoy TV', 'Bangla', 'https://tvsen6.aynaott.com/bijoytv/index.m3u8?e=1779283761&u=78be6644-0a65-48ec-81a4-089ac65a2619&token=5c8b85f4f92c654640f3abdc1ac061c6')">
+          <div class="channel-logo" style="background:#0a2d1a;color:#4ade80">BT</div>
+          <span class="ch-name">Bijoy TV</span>
+          <span class="ch-live">LIVE</span>
+        </div>
+
+        <div class="channel-item" onclick="selectChannel(this, 'My TV', 'Bangla', 'https://tvsen6.aynaott.com/mytv/index.m3u8?e=1779283760&u=78be6644-0a65-48ec-81a4-089ac65a2619&token=0a2ae0189a44e789d3fecffe5a474ec3')">
+          <div class="channel-logo" style="background:#1a0a2e;color:#c084fc">MT</div>
+          <span class="ch-name">My TV</span>
+          <span class="ch-live">LIVE</span>
+        </div>
+
+        <div class="channel-item" onclick="selectChannel(this, 'Deepto TV', 'Bangla', 'https://tvsen5.aynaott.com/DeeptoTVHD/index.m3u8?e=1779283753&u=78be6644-0a65-48ec-81a4-089ac65a2619&token=12455a1472f0cbf29e22967cc44a49c0')">
+          <div class="channel-logo" style="background:#0a1e1e;color:#2dd4bf">DT</div>
           <span class="ch-name">Deepto TV</span>
+          <span class="ch-live">LIVE</span>
         </div>
-      </div>
 
-      <!-- ৩. খেলাধুলা বিভাগ -->
-      <div class="sidebar-section">
-        <div class="sidebar-title">খেলাধুলা (Sports)</div>
-        <div class="channel-item" onclick="selectChannel(this, 'T Sports', 'https://tvsen7.aynaott.com/tsports-hd/index.m3u8?e=1779283784&u=78be6644-0a65-48ec-81a4-089ac65a2619&token=3b4c5a2cfa872fa7f91ffbfb4aa0f658')">
-          <div class="channel-logo" style="background:#991b1b; color:#f87171">TS</div>
+        <div class="channel-item" onclick="selectChannel(this, 'T Sports HD', 'Sports', 'https://tvsen7.aynaott.com/tsports-hd/index.m3u8?e=1779283784&u=78be6644-0a65-48ec-81a4-089ac65a2619&token=3b4c5a2cfa872fa7f91ffbfb4aa0f658')">
+          <div class="channel-logo" style="background:#2d1b4e;color:#a78bfa">TS</div>
           <span class="ch-name">T Sports HD</span>
+          <span class="ch-live">LIVE</span>
         </div>
-      </div>
 
+        <div class="channel-item" onclick="selectChannel(this, 'Somoy News TV', 'News', 'https://tvsen6.aynaott.com/somoytv/index.m3u8?e=1779283766&u=78be6644-0a65-48ec-81a4-089ac65a2619&token=269246b8a31fb3a656624d71e10e447d')">
+          <div class="channel-logo" style="background:#0a1e3d;color:#60a5fa">ST</div>
+          <span class="ch-name">Somoy News TV</span>
+          <span class="ch-live">LIVE</span>
+        </div>
+
+        <div class="channel-item" onclick="selectChannel(this, 'Channel 1', 'Imported', 'https://tvsen6.aynaott.com/btvctg/index.m3u8?e=1779283747&u=78be6644-0a65-48ec-81a4-089ac65a2619&token=9bca925fbdfe526b29d41ab7802348ec')">
+          <div class="channel-logo" style="background:#2d0a0a;color:#f87171">C1</div>
+          <span class="ch-name">Channel 1</span>
+          <span class="ch-live">LIVE</span>
+        </div>
+
+        <div class="channel-item" onclick="selectChannel(this, 'Somoy TV', 'Bangladesh', 'https://owrcovcrpy.gpcdn.net/bpk-tv/1702/output/1702-audio_113322_eng=113200-video=2202800.m3u8')">
+          <div class="channel-logo" style="background:#2a1e00;color:#fbbf24">ST</div>
+          <span class="ch-name">Somoy TV</span>
+          <span class="ch-live">LIVE</span>
+        </div>
+
+      </div>
     </div>
 
     <div class="content">
       <div class="player-section">
-        <video id="video" controls autoplay playsinline></video>
+        <div class="player-wrap" onclick="togglePlay()" id="playerWrap">
+          <div class="player-bg"></div>
+          
+          <video id="video" playsinline></video>
+          
+          <div class="now-playing-badge"><div class="live-dot"></div> LIVE</div>
+          
+          <div class="play-btn" id="playBtn">
+            <i class="ti ti-player-play" id="playIcon"></i>
+          </div>
+          
+          <div class="player-info">
+            <div class="player-title" id="playerTitle">Ananda TV — লাইভ স্ট্রিম</div>
+            <div class="player-sub" id="playerSub">এখন চলছে: Bangla</div>
+          </div>
+        </div>
+        
+        <div class="controls">
+          <button class="ctrl-btn" onclick="togglePlay()" title="Play/Pause">
+            <i class="ti ti-player-play" id="ctrlPlay"></i>
+          </button>
+          <button class="ctrl-btn" title="Skip back"><i class="ti ti-player-skip-back"></i></button>
+          <button class="ctrl-btn" title="Skip forward"><i class="ti ti-player-skip-forward"></i></button>
+          <div class="progress-wrap">
+            <div class="progress-bar">
+              <div class="progress-fill" id="progFill"></div>
+            </div>
+            <div class="time"><span id="curTime">LIVE STREAMING</span><span>LIVE</span></div>
+          </div>
+          <div class="vol-row">
+            <button class="ctrl-btn"><i class="ti ti-volume"></i></button>
+            <div class="vol-bar"><div class="vol-fill"></div></div>
+          </div>
+          <button class="ctrl-btn" onclick="toggleFullscreen()" title="Fullscreen"><i class="ti ti-maximize"></i></button>
+        </div>
+      </div>
+
+      <div class="section-header">
+        <span class="section-title">আজকের TV গাইড (EPG)</span>
+      </div>
+      <div class="epg-row">
+        <div class="epg-item current">
+          <div class="epg-time">18:00 – 19:00</div>
+          <div class="epg-show">সন্ধ্যা সংবাদ</div>
+          <div class="epg-ch">Bangla Vision</div>
+        </div>
+        <div class="epg-item">
+          <div class="epg-time">19:00 – 20:00</div>
+          <div class="epg-show">ধারাবাহিক নাটক</div>
+          <div class="epg-ch">Bangla Vision</div>
+        </div>
+        <div class="epg-item">
+          <div class="epg-time">20:00 – 21:00</div>
+          <div class="epg-show">রাற்றி সংবাদ</div>
+          <div class="epg-ch">ATN Bangla</div>
+        </div>
+      </div>
+
+      <div class="section-header">
+        <span class="section-title">জনপ্রিয় মুভি</span>
+        <button class="see-all">সব দেখুন →</button>
+      </div>
+      <div class="cards-row">
+        <div class="vod-card">
+          <div class="vod-thumb" style="background:#1a0a2e">🎬<div class="vod-badge badge-hd">HD</div></div>
+          <div class="vod-info"><div class="vod-title">Hawa</div><div class="vod-meta">2022 • ড্রاما</div></div>
+        </div>
+        <div class="vod-card">
+          <div class="vod-thumb" style="background:#0a1a0a">🎭<div class="vod-badge badge-new">NEW</div></div>
+          <div class="vod-info"><div class="vod-title">Poran</div><div class="vod-meta">2022 • থ্রিলার</div></div>
+        </div>
+        <div class="vod-card">
+          <div class="vod-thumb" style="background:#1a1a0a">🎪</div>
+          <div class="vod-info"><div class="vod-title">Aynabaji</div><div class="vod-meta">2016 • ক্রাইম</div></div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-  const video = document.getElementById('video');
-  let hls = new Hls();
+const video = document.getElementById('video');
+let hls = new Hls();
 
-  function selectChannel(el, name, url) {
-    // অ্যাক্টিভ ক্লাস ম্যানেজমেন্ট
-    document.querySelectorAll('.channel-item').forEach(i => i.classList.remove('active'));
-    el.classList.add('active');
-    
-    // ভিডিও প্লেয়ার লোড
-    if (Hls.isSupported()) {
-      hls.destroy();
-      hls = new Hls();
-      hls.loadSource(url);
-      hls.attachMedia(video);
-      hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
-    }
+// পেজ ওপেন হলে ডিফল্ট Ananda TV প্লে হবে
+window.onload = function() {
+  loadStream('https://tvsen6.aynaott.com/anandatv/index.m3u8?e=1779283759&u=78be6644-0a65-48ec-81a4-089ac65a2619&token=504b9350b4703116ca4ab20e4013288e');
+};
+
+function loadStream(url) {
+  const playBtn = document.getElementById('playBtn');
+  const playIcon = document.getElementById('playIcon');
+  const ctrlPlay = document.getElementById('ctrlPlay');
+
+  if (Hls.isSupported()) {
+    hls.destroy(); 
+    hls = new Hls();
+    hls.loadSource(url);
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED, function() {
+      video.play().then(() => {
+        playBtn.style.display = 'none';
+        playIcon.className = 'ti ti-player-pause';
+        ctrlPlay.className = 'ti ti-player-pause';
+      }).catch(e => {
+        playBtn.style.display = 'flex';
+        playIcon.className = 'ti ti-player-play';
+        ctrlPlay.className = 'ti ti-player-play';
+      });
+    });
+  } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    video.src = url;
+    video.addEventListener('loadedmetadata', function() {
+      video.play();
+      playBtn.style.display = 'none';
+      playIcon.className = 'ti ti-player-pause';
+      ctrlPlay.className = 'ti ti-player-pause';
+    });
   }
+}
 
-  // অটো লোড প্রথম চ্যানেল
-  window.onload = () => {
-    document.querySelector('.channel-item.active').click();
-  };
+function togglePlay(){
+  const playBtn = document.getElementById('playBtn');
+  const playIcon = document.getElementById('playIcon');
+  const ctrlPlay = document.getElementById('ctrlPlay');
+
+  if(video.paused){
+    video.play().then(() => {
+      playBtn.style.display = 'none';
+      playIcon.className = 'ti ti-player-pause';
+      ctrlPlay.className = 'ti ti-player-pause';
+    });
+  } else {
+    video.pause();
+    playBtn.style.display = 'flex';
+    playIcon.className = 'ti ti-player-play';
+    ctrlPlay.className = 'ti ti-player-play';
+  }
+}
+
+function selectChannel(el, name, desc, streamUrl){
+  document.querySelectorAll('.channel-item').forEach(i=>i.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('playerTitle').textContent = name + ' — লাইভ স্ট্রিম';
+  document.getElementById('playerSub').textContent = 'এখন চলছে: ' + desc;
+  
+  loadStream(streamUrl);
+}
+
+function setTab(el, tab){
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function toggleFullscreen(){
+  if (video.requestFullscreen) { video.requestFullscreen(); }
+  else if (video.webkitRequestFullscreen) { video.webkitRequestFullscreen(); }
+  else if (video.msRequestFullscreen) { video.msRequestFullscreen(); }
+}
 </script>
 
 </body>
