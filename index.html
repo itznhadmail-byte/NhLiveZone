@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StreamBD - Live IPTV</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+  <style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:sans-serif;background:#0a0a0f;color:#e8e8f0;min-height:100vh}
+  .app{display:flex;flex-direction:column;min-height:100vh;background:#0a0a0f}
+  .topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;background:#111118;border-bottom:0.5px solid rgba(255,255,255,0.08)}
+  .logo{font-size:18px;font-weight:500;color:#a78bfa;letter-spacing:-0.3px}
+  .logo span{color:#e8e8f0}
+  .nav{display:flex;gap:6px}
+  .nav-btn{background:transparent;border:none;color:#888;font-size:13px;padding:6px 14px;border-radius:6px;cursor:pointer;transition:all 0.15s}
+  .nav-btn.active{background:#1e1e2e;color:#a78bfa}
+  .nav-btn:hover:not(.active){color:#e8e8f0;background:#1a1a28}
+  .search-bar{display:flex;align-items:center;gap:8px;background:#1a1a28;border:0.5px solid rgba(255,255,255,0.1);border-radius:8px;padding:6px 12px}
+  .search-bar input{background:transparent;border:none;outline:none;color:#e8e8f0;font-size:13px;width:160px}
+  .search-bar input::placeholder{color:#555}
+  .main{display:flex;flex:1;gap:0}
+  .sidebar{width:220px;background:#0e0e18;border-right:0.5px solid rgba(255,255,255,0.07);padding:16px 0;flex-shrink:0}
+  .sidebar-section{margin-bottom:24px}
+  .sidebar-title{font-size:10px;font-weight:500;color:#555;letter-spacing:0.8px;text-transform:uppercase;padding:0 16px;margin-bottom:8px}
+  .channel-item{display:flex;align-items:center;gap:10px;padding:8px 16px;cursor:pointer;transition:background 0.1s;border-left:2px solid transparent}
+  .channel-item:hover{background:rgba(167,139,250,0.06)}
+  .channel-item.active{background:rgba(167,139,250,0.1);border-left:2px solid #a78bfa}
+  .channel-logo{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0}
+  .ch-name{font-size:13px;color:#c8c8d8}
+  .ch-live{font-size:10px;color:#22c55e;background:rgba(34,197,94,0.12);padding:1px 6px;border-radius:4px;margin-left:auto}
+  .content{flex:1;padding:20px;overflow-y:auto;min-width:0}
+  .player-section{background:#111118;border-radius:12px;overflow:hidden;margin-bottom:20px;border:0.5px solid rgba(255,255,255,0.07)}
+  .player-wrap{position:relative;background:#000;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;cursor:pointer;max-height:340px}
+  
+  /* আসল ভিডিওর জন্য স্টাইল */
+  video {width:100%; height:100%; object-fit:contain; z-index:1;}
+
+  .play-btn{position:absolute;z-index:2;width:64px;height:64px;background:rgba(167,139,250,0.2);border:1.5px solid rgba(167,139,250,0.4);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+  .play-btn:hover{background:rgba(167,139,250,0.35);transform:scale(1.05)}
+  .play-btn i{font-size:24px;color:#a78bfa;margin-left:4px}
+  .now-playing-badge{position:absolute;top:12px;left:12px;z-index:2;background:rgba(239,68,68,0.85);color:#fff;font-size:11px;font-weight:500;padding:3px 8px;border-radius:4px;display:flex;align-items:center;gap:4px}
+  .live-dot{width:6px;height:6px;background:#fff;border-radius:50%;animation:blink 1s infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+  .player-info{position:absolute;bottom:0;left:0;right:0;padding:12px 16px;background:linear-gradient(0deg,rgba(0,0,0,0.8),transparent);z-index:2}
+  .player-title{font-size:14px;font-weight:500;color:#fff}
+  .player-sub{font-size:12px;color:rgba(255,255,255,0.6);margin-top:2px}
+  .controls{display:flex;align-items:center;gap:12px;padding:10px 16px;background:#151520}
+  .ctrl-btn{background:transparent;border:none;color:#888;cursor:pointer;display:flex;align-items:center;font-size:18px;padding:4px;border-radius:4px;transition:color 0.15s}
+  .ctrl-btn:hover{color:#a78bfa}
+  .progress-wrap{flex:1;display:flex;flex-direction:column;gap:4px}
+  .progress-bar{height:3px;background:rgba(255,255,255,0.12);border-radius:2px;cursor:pointer;position:relative}
+  .progress-fill{height:100%;width:100%;background:#a78bfa;border-radius:2px;position:relative}
+  .time{font-size:11px;color:#555;display:flex;justify-content:space-between}
+  .vol-row{display:flex;align-items:center;gap:6px;margin-left:auto}
+  .vol-bar{width:60px;height:3px;background:rgba(255,255,255,0.12);border-radius:2px;cursor:pointer}
+  .vol-fill{width:100%;height:100%;background:#a78bfa;border-radius:2px}
+  .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .section-title{font-size:15px;font-weight:500;color:#e8e8f0}
+  .see-all{font-size:12px;color:#a78bfa;background:transparent;border:none;cursor:pointer}
+  .cards-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-bottom:24px}
+  .vod-card{border-radius:8px;overflow:hidden;cursor:pointer;transition:transform 0.15s;position:relative;background:#1a1a28;border:0.5px solid rgba(255,255,255,0.07)}
+  .vod-card:hover{transform:translateY(-2px)}
+  .vod-thumb{aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;font-size:28px;position:relative}
+  .vod-badge{position:absolute;top:6px;right:6px;font-size:10px;padding:2px 6px;border-radius:3px;font-weight:500}
+  .badge-hd{background:rgba(59,130,246,0.8);color:#fff}
+  .badge-new{background:rgba(34,197,94,0.8);color:#fff}
+  .vod-info{padding:8px 10px}
+  .vod-title{font-size:12px;font-weight:500;color:#d8d8e8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .vod-meta{font-size:11px;color:#555;margin-top:2px}
+  .epg-row{display:flex;gap:8px;margin-bottom:20px;overflow-x:auto;padding-bottom:4px}
+  .epg-item{flex-shrink:0;background:#1a1a28;border-radius:6px;padding:8px 12px;border:0.5px solid rgba(255,255,255,0.07);min-width:120px}
+  .epg-time{font-size:10px;color:#a78bfa;margin-bottom:3px}
+  .epg-show{font-size:12px;color:#c8c8d8;font-weight:500}
+  .epg-ch{font-size:10px;color:#555}
+  .epg-item.current{border-color:rgba(167,139,250,0.3);background:rgba(167,139,250,0.08)}
+  </style>
+</head>
+<body>
+
+<div class="app">
+  <div class="topbar">
+    <div class="logo">Stream<span>BD</span></div>
+    <div class="nav">
+      <button class="nav-btn active"><i class="ti ti-live-photo"></i> Live TV</button>
+      <button class="nav-btn"><i class="ti ti-movie"></i> Movies</button>
+      <button class="nav-btn"><i class="ti ti-device-tv"></i> Series</button>
+    </div>
+    <div class="search-bar">
+      <i class="ti ti-search" style="color:#555;font-size:15px"></i>
+      <input type="text" placeholder="চ্যানেল বা মুভি খুঁজুন...">
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">লাইভ চ্যানেলসমূহ</div>
+        
+        <div class="channel-item active" onclick="selectChannel(this,'Somoy TV','সময় টিভি লাইভ','https://ch-01.ideatv.online/somoy/index.m3u8')">
+          <div class="channel-logo" style="background:#2a1e00;color:#fbbf24">STV</div>
+          <span class="ch-name">Somoy TV</span>
+          <span class="ch-live">LIVE</span>
+        </div>
+        
+        <div class="channel-item" onclick="selectChannel(this,'Independent TV','ইনডিপেনডেন্ট লাইভ','https://ch-01.ideatv.online/independent/index.m3u8')">
+          <div class="channel-logo" style="background:#0a1e3d;color:#60a5fa">ITV</div>
+          <span class="ch-name">Independent</span>
+          <span class="ch-live">LIVE</span>
+        </div>
+
+        <div class="channel-item" onclick="selectChannel(this,'Jamuna TV','যমুনা টিভি লাইভ','https://ch-01.ideatv.online/jamuna/index.m3u8')">
+          <div class="channel-logo" style="background:#2d0a0a;color:#f87171">JTV</div>
+          <span class="ch-name">Jamuna TV</span>
+          <span class="ch-live">LIVE</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="player-section">
+        <div class="player-wrap" id="playerWrap">
+          <video id="video" controls></video>
+          
+          <div class="now-playing-badge"><div class="live-dot"></div> LIVE</div>
+          <div class="player-info">
+            <div class="player-title" id="playerTitle">Somoy TV — লাইভ স্ট্রিম</div>
+            <div class="player-sub" id="playerSub">এখন চলছে: সময় টিভি লাইভ</div>
+          </div>
+        </div>
+        
+        <div class="controls">
+          <button class="ctrl-btn" onclick="togglePlay()"><i class="ti ti-player-play" id="ctrlPlay"></i></button>
+          <div class="progress-wrap">
+            <div class="progress-bar"><div class="progress-fill"></div></div>
+            <div class="time"><span>LIVE STREAMING</span><span>LIVE</span></div>
+          </div>
+          <button class="ctrl-btn" onclick="toggleFullscreen()"><i class="ti ti-maximize"></i></button>
+        </div>
+      </div>
+
+      <div class="section-header"><span class="section-title">আজকের TV গাইড (EPG)</span></div>
+      <div class="epg-row">
+        <div class="epg-item current">
+          <div class="epg-time">এখন চলছে</div>
+          <div class="epg-show">লাইভ সংবাদ</div>
+          <div class="epg-ch">StreamBD</div>
+        </div>
+      </div>
+
+      <div class="section-header"><span class="section-title">জনপ্রিয় মুভি</span></div>
+      <div class="cards-row">
+        <div class="vod-card">
+          <div class="vod-thumb" style="background:#1a0a2e">🎬<div class="vod-badge badge-hd">HD</div></div>
+          <div class="vod-info"><div class="vod-title">Hawa</div><div class="vod-meta">2022 • ড্রামা</div></div>
+        </div>
+        <div class="vod-card">
+          <div class="vod-thumb" style="background:#0a1a0a">🎭<div class="vod-badge badge-new">NEW</div></div>
+          <div class="vod-info"><div class="vod-title">Poran</div><div class="vod-meta">2022 • থ্রিলার</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const video = document.getElementById('video');
+let hls = new Hls();
+
+// প্রথমবার পেজ লোড হলে ডিফল্ট চ্যানেল চালানো
+window.onload = function() {
+  loadStream('https://ch-01.ideatv.online/somoy/index.m3u8');
+};
+
+// ভিডিও লিংক লোড করার ফাংশন
+function loadStream(url) {
+  if (Hls.isSupported()) {
+    hls.destroy(); // আগের স্ট্রিম বন্ধ করা
+    hls = new Hls();
+    hls.loadSource(url);
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED, function() {
+      video.play().catch(e => console.log("Autoplay blocked"));
+    });
+  } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    video.src = url;
+    video.addEventListener('loadedmetadata', function() {
+      video.play();
+    });
+  }
+}
+
+// সাইডবার থেকে চ্যানেল পরিবর্তন করার ফাংশন
+function selectChannel(el, name, desc, streamUrl){
+  document.querySelectorAll('.channel-item').forEach(i=>i.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('playerTitle').textContent = name + ' — লাইভ স্ট্রিম';
+  document.getElementById('playerSub').textContent = 'এখন চলছে: ' + desc;
+  
+  // নতুন চ্যানেলের ভিডিও লোড করা
+  loadStream(streamUrl);
+}
+
+function togglePlay(){
+  if (video.paused) {
+    video.play();
+    document.getElementById('ctrlPlay').className = 'ti ti-player-pause';
+  } else {
+    video.pause();
+    document.getElementById('ctrlPlay').className = 'ti ti-player-play';
+  }
+}
+
+function toggleFullscreen(){
+  if (video.requestFullscreen) { video.requestFullscreen(); }
+  else if (video.webkitRequestFullscreen) { video.webkitRequestFullscreen(); }
+  else if (video.msRequestFullscreen) { video.msRequestFullscreen(); }
+}
+</script>
+
+</body>
+</html>
