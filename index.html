@@ -49,7 +49,6 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
   flex-wrap:wrap;flex-shrink:0;
 }
 
-/* brand with real logo */
 .brand{display:flex;align-items:center;gap:9px;flex-shrink:0;text-decoration:none}
 .brand-img{
   height:36px;width:36px;object-fit:contain;
@@ -99,10 +98,8 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
 }
 .topbar-search input::placeholder{color:var(--text3)}
 
-/* spacer pushes clock to far right */
 .topbar-spacer{flex:1}
 
-/* digital clock */
 .digital-clock{
   display:flex;align-items:center;gap:8px;flex-shrink:0;
 }
@@ -120,11 +117,9 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
 }
 .clock-day{font-size:11px;font-weight:600;color:var(--text2);display:block}
 
-/* cat row */
 .cat-row{display:flex;align-items:center;gap:5px;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none;width:100%}
 .cat-row::-webkit-scrollbar{display:none}
 
-/* category pills */
 .cat-pill{
   display:flex;align-items:center;gap:5px;
   padding:5px 13px;border-radius:20px;
@@ -203,7 +198,6 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
   width:100%;background:#020509;
   display:flex;align-items:center;justify-content:center;
   position:relative;overflow:hidden;
-  /* smaller player — max 55% of available height */
   flex:0 0 auto;
   aspect-ratio:16/9;
   max-height:55vh;
@@ -237,7 +231,6 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
 .live-tag{font-size:10px;font-weight:700;padding:3px 9px;border-radius:4px;letter-spacing:.06em;color:#fff}
 .ch-now{font-size:12px;font-weight:600;color:rgba(255,255,255,.85);text-shadow:0 1px 4px rgba(0,0,0,.5)}
 
-/* quality badge top-right */
 .quality-badge{
   position:absolute;top:12px;right:14px;z-index:5;
   display:none;
@@ -258,11 +251,9 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
   white-space:nowrap;display:none;z-index:10;backdrop-filter:blur(6px);
 }
 
-/* ── progress ── */
 .pbar-wrap{height:2px;background:rgba(255,255,255,0.04);flex-shrink:0}
 .pbar-fill{height:100%;width:0%;transition:width .3s;background:linear-gradient(to right,var(--accent2),var(--accent))}
 
-/* ── play controls overlay (above now-bar) ── */
 .ctrl-bar{
   display:flex;align-items:center;justify-content:center;gap:10px;
   padding:8px 16px;background:var(--bg2);border-top:1px solid var(--border);flex-shrink:0;
@@ -284,7 +275,6 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
 .ctrl-btn i{font-size:17px}
 .ctrl-btn.play-btn i{font-size:20px}
 
-/* quality menu */
 .quality-wrap{position:relative;flex-shrink:0}
 .quality-menu{
   position:absolute;bottom:calc(100% + 8px);right:0;
@@ -304,7 +294,6 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
 .qopt .check{font-size:12px;opacity:0}
 .qopt.active .check{opacity:1}
 
-/* ── now bar ── */
 .now-bar{
   display:flex;align-items:center;gap:12px;
   padding:8px 14px;border-top:1px solid var(--border);
@@ -335,7 +324,6 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
 .vol-row input{width:68px;accent-color:var(--accent)}
 .divider{width:1px;height:20px;background:var(--border);flex-shrink:0}
 
-/* ══════════════ NEW: PLAYER BOTTOM CONTENT ══════════════ */
 .player-bottom-area {
   display: flex;
   gap: 16px;
@@ -423,7 +411,6 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
   border-radius: 4px;
 }
 
-/* Chat Panel Styles */
 .chat-card {
   padding: 0;
   display: flex;
@@ -512,7 +499,6 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
   background: #3b66c4;
 }
 
-/* ── FOOTER ── */
 .footer{
   display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
   padding:8px 16px;border-top:1px solid var(--border);background:var(--bg2);flex-shrink:0;
@@ -522,7 +508,6 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
 .footer-copy a{color:var(--accent);text-decoration:none;font-weight:600}
 .footer-copy a:hover{text-decoration:underline}
 
-/* ══════════════ MOBILE ══════════════ */
 @media (max-width:680px){
   html,body{overflow:auto}
   .tv-app{height:auto;min-height:100dvh}
@@ -580,7 +565,7 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
 </style>
 
 <div class="tv-app">
-
+  <!-- TOP BAR -->
   <div class="topbar">
     <div class="brand">
       <div class="brand-svg">
@@ -612,6 +597,7 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
 
     <div class="topbar-spacer"></div>
 
+    <!-- Clock -->
     <div class="digital-clock">
       <div>
         <div class="clock-time" id="clock-time">00<span class="clock-colon">:</span>00<span class="clock-colon">:</span>00</div>
@@ -619,15 +605,17 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
       </div>
     </div>
 
+    <!-- Categories container -->
     <div class="cat-row" id="cats"></div>
   </div>
 
+  <!-- MAIN BODY -->
   <div class="body">
-
+    <!-- SIDEBAR -->
     <div class="sidebar" id="sidebar"></div>
 
+    <!-- PLAYER AREA -->
     <div class="player-col">
-
       <div class="player-screen" id="screen">
         <div class="screen-grad" id="screen-grad"></div>
         <div class="player-tl" id="ptl" style="display:none">
@@ -636,6 +624,7 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
         </div>
         <div class="quality-badge" id="quality-badge">AUTO</div>
 
+        <!-- Idle View -->
         <div class="idle-state" id="idle">
           <div class="idle-logo-wrap">
             <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -657,33 +646,37 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
           <div class="idle-sub">Select a channel to start watching</div>
         </div>
 
+        <!-- Loading View -->
         <div class="loading-state" id="loading">
           <img id="loading-logo" class="loading-logo" src="" alt="" style="display:none"/>
           <div class="spinner"></div>
           <span class="loading-ch" id="loading-ch">Loading…</span>
         </div>
 
+        <!-- Video Wrapper -->
         <div class="video-wrap" id="vwrap"><video id="vid"></video></div>
         <div class="err-msg" id="errmsg"></div>
       </div>
 
       <div class="pbar-wrap"><div class="pbar-fill" id="pbar"></div></div>
 
+      <!-- CONTROLS -->
       <div class="ctrl-bar">
-        <button class="ctrl-btn" onclick="seekBack()" title="Restart / Reload" aria-label="Reload">
+        <button class="ctrl-btn" onclick="seekBack()" title="Restart / Reload">
           <i class="ti ti-player-skip-back"></i>
         </button>
-        <button class="ctrl-btn play-btn" id="playbtn" onclick="togglePlay()" title="Play/Pause" aria-label="Play/Pause">
+        <button class="ctrl-btn play-btn" id="playbtn" onclick="togglePlay()" title="Play/Pause">
           <i class="ti ti-player-play" id="play-icon"></i>
         </button>
-        <button class="ctrl-btn" onclick="stopStream()" title="Stop" aria-label="Stop">
+        <button class="ctrl-btn" onclick="stopStream()" title="Stop">
           <i class="ti ti-player-stop"></i>
         </button>
 
         <div style="flex:1"></div>
 
+        <!-- Quality menu -->
         <div class="quality-wrap" id="qwrap">
-          <button class="ctrl-btn" onclick="toggleQMenu()" title="Quality" aria-label="Quality" id="qbtn" style="width:auto;border-radius:6px;padding:0 10px;gap:5px;font-size:11px;font-weight:600;color:var(--text2)">
+          <button class="ctrl-btn" onclick="toggleQMenu()" id="qbtn" style="width:auto;border-radius:6px;padding:0 10px;gap:5px;font-size:11px;font-weight:600;color:var(--text2)">
             <i class="ti ti-settings" style="font-size:14px"></i>
             <span id="qbtn-label">Quality</span>
           </button>
@@ -696,14 +689,15 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
           </div>
         </div>
 
-        <button class="ctrl-btn" id="mutebtn2" onclick="toggleMute()" title="Mute" aria-label="Mute">
+        <button class="ctrl-btn" id="mutebtn2" onclick="toggleMute()" title="Mute">
           <i class="ti ti-volume"></i>
         </button>
-        <button class="ctrl-btn" onclick="doFS()" title="Fullscreen" aria-label="Fullscreen">
+        <button class="ctrl-btn" onclick="doFS()" title="Fullscreen">
           <i class="ti ti-maximize"></i>
         </button>
       </div>
 
+      <!-- NOW BAR -->
       <div class="now-bar">
         <div class="now-brand">
           <div class="now-logo" id="now-logo-wrap"><span>Nh</span></div>
@@ -715,15 +709,16 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
         <div class="now-controls">
           <div class="vol-row">
             <i class="ti ti-volume-2"></i>
-            <input type="range" min="0" max="100" value="80" step="1" aria-label="Volume" oninput="setVol(this.value)" />
+            <input type="range" min="0" max="100" value="80" step="1" oninput="setVol(this.value)" />
           </div>
           <div class="divider"></div>
-          <button class="icon-btn" id="mutebtn" onclick="toggleMute()" title="Mute" aria-label="Mute">
+          <button class="icon-btn" id="mutebtn" onclick="toggleMute()" title="Mute">
             <i class="ti ti-volume"></i>
           </button>
         </div>
       </div>
 
+      <!-- BOTTOM DATA AREA -->
       <div class="player-bottom-area">
         <div class="bottom-left">
           <div class="info-card">
@@ -743,10 +738,6 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
                 <span class="epg-time">11:30 PM - 12:30 AM</span>
                 <span class="epg-title">রাতের প্রধান সংবাদ (Nightly News)</span>
               </div>
-              <div class="epg-item">
-                <span class="epg-time">12:30 AM - 01:30 AM</span>
-                <span class="epg-title">টক শো: সমসাময়িক বাংলাদেশ</span>
-              </div>
             </div>
           </div>
         </div>
@@ -758,18 +749,8 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
               <span class="chat-count"><span class="pulse"></span> 1.2K Online</span>
             </div>
             <div class="chat-messages" id="chat-box">
-              <div class="chat-msg">
-                <span class="chat-user" style="color: #5b9bff;">Sabbir:</span>
-                <span class="chat-text">Stream quality khub e valo! 🔥</span>
-              </div>
-              <div class="chat-msg">
-                <span class="chat-user" style="color: #ffd700;">Rana:</span>
-                <span class="chat-text">Buffer charai choltese, thanks admin! ❤️</span>
-              </div>
-              <div class="chat-msg">
-                <span class="chat-user" style="color: #4ade80;">Anika:</span>
-                <span class="chat-text">Finally high-quality bangla iptv platform pelam.</span>
-              </div>
+              <div class="chat-msg"><span class="chat-user" style="color: #5b9bff;">Sabbir:</span><span class="chat-text">Stream quality khub e valo! 🔥</span></div>
+              <div class="chat-msg"><span class="chat-user" style="color: #ffd700;">Rana:</span><span class="chat-text">Buffer charai choltese, thanks admin! ❤️</span></div>
             </div>
             <div class="chat-input-wrap">
               <input type="text" id="chat-input" placeholder="Type a message..." onkeypress="handleChatKey(event)">
@@ -778,25 +759,26 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
           </div>
         </div>
       </div>
-
     </div>
   </div>
 
+  <!-- FOOTER -->
   <div class="footer">
     <div class="footer-privacy">🔒 We do not collect or share your personal data.</div>
     <div class="footer-copy">© 2026 NHLiveZone · Made with ❤️ by <a href="https://www.facebook.com/iamnhrana" target="_blank" rel="noopener">NhZone</a></div>
   </div>
 </div>
 
+<!-- EXTERNAL JAVASCRIPT LIBS -->
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.7/dist/hls.min.js"></script>
 <script>
 /* ── DATA ── */
 const channels=[
-  // FIFA 2026 (first category)
   {id:100,name:"FIFA 2026",cat:"FIFA 2026",sub:"World Cup",abbr:"FIFA",bg:"#1a3a10",txt:"#ffd700",url:null,fifa:true},
   {id:101,name:"beIN Sports",cat:"FIFA 2026",sub:"Sports",abbr:"bIN",bg:"#0d2d4a",txt:"#ffd700",url:null,fifa:true},
   {id:102,name:"Sony Sports",cat:"FIFA 2026",sub:"Sports",abbr:"SON",bg:"#1a1030",txt:"#ffd700",url:null,fifa:true},
-  // Bangladesh
+  {id:103,name:"Sony SAB",cat:"FIFA 2026",sub:"Entertainment",logo:"https://upload.wikimedia.org/wikipedia/commons/b/b2/Sony_SAB_2022.png",url:"http://172.27.27.3:801/16_SonySAB/index.m3u8",fifa:true},
+  {id:104,name:"Star Sports 1",cat:"FIFA 2026",sub:"Sports",logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Star_Sports_1.svg/512px-Star_Sports_1.svg.png",url:"http://172.27.27.3:801/07_StarSports1/index.m3u8",fifa:true},
   {id:1,name:"Jamuna TV",cat:"Bangladesh",sub:"News",logo:"https://tstatic.akash-go.com/cms-ui/images/custom-content/1735560213832.png",url:"https://owrcovcrpy.gpcdn.net/bpk-tv/1701/output/index.m3u8"},
   {id:2,name:"DBC News HD",cat:"Bangladesh",sub:"News",logo:"https://tstatic.akash-go.com/cms-ui/images/custom-content/1770186306600.png",url:"https://owrcovcrpy.gpcdn.net/bpk-tv/1728/output/index.m3u8"},
   {id:3,name:"Maasranga TV",cat:"Bangladesh",sub:"Entertainment",logo:"https://tstatic.akash-go.com/cms-ui/images/custom-content/1773680325498.png",url:"https://owrcovcrpy.gpcdn.net/bpk-tv/1722/output/index.m3u8"},
@@ -813,18 +795,15 @@ const channels=[
   {id:14,name:"BTV Shangshad",cat:"Bangladesh",sub:"News",logo:"https://tstatic.akash-go.com/cms-ui/images/custom-content/1781166550297.png",url:"https://owrcovcrpy.gpcdn.net/bpk-tv/1709/output/index.m3u8"},
   {id:15,name:"Independent TV",cat:"Bangladesh",sub:"News",logo:"https://tstatic.akash-go.com/cms-ui/images/custom-content/1778087037971.png",url:"https://owrcovcrpy.gpcdn.net/bpk-tv/1704/output/index.m3u8"},
   {id:16,name:"Channel 1",cat:"Bangladesh",sub:"News",logo:"https://tstatic.akash-go.com/cms-ui/images/custom-content/1781163068414.png",url:"https://owrcovcrpy.gpcdn.net/bpk-tv/1702/output/index.m3u8"},
-  // Indian
   {id:17,name:"Zee Bangla",cat:"Indian",sub:"Entertainment",abbr:"Zee",bg:"#1f3a26",txt:"#9be3b4",url:null},
   {id:18,name:"Star Jalsha",cat:"Indian",sub:"Entertainment",abbr:"SJL",bg:"#4a3a14",txt:"#fbe7c6",url:null},
   {id:19,name:"Aaj Tak",cat:"Indian",sub:"News",abbr:"AAJ",bg:"#4a1f1f",txt:"#ffc3c3",url:null},
-  // International
   {id:20,name:"BBC World",cat:"International",sub:"News",abbr:"BBC",bg:"#1d3f56",txt:"#cdeaff",url:null},
   {id:21,name:"Al Jazeera",cat:"International",sub:"News",abbr:"AJZ",bg:"#1f3a30",txt:"#9be3c4",url:null},
   {id:22,name:"CNN",cat:"International",sub:"News",abbr:"CNN",bg:"#4a2a1f",txt:"#ffcdb8",url:null},
-  // Sports
   {id:23,name:"T Sports",cat:"Sports",sub:"Sports",abbr:"TSP",bg:"#1f3a30",txt:"#9be3c4",url:null},
   {id:24,name:"Star Sports 1",cat:"Sports",sub:"Sports",abbr:"SS1",bg:"#1d3f56",txt:"#cdeaff",url:null},
-  {id:25,name:"ESPN",cat:"Sports",sub:"Sports",abbr:"ESPN",bg:"#4a1f1f",txt:"#ffc3c3",url:null},
+  {id:25,name:"ESPN",cat:"Sports",sub:"Sports",abbr:"ESPN",bg:"#4a1f1f",txt:"#ffc3c3",url:null}
 ];
 
 const catCfg={
@@ -833,7 +812,7 @@ const catCfg={
   "Bangladesh":{cls:"on-bd", icon:"ti-flag"},
   "Indian":   {cls:"on-in",  icon:"ti-map-pin"},
   "International":{cls:"on-int",icon:"ti-world"},
-  "Sports":   {cls:"on-sp",  icon:"ti-ball-football"},
+  "Sports":   {cls:"on-sp",  icon:"ti-ball-football"}
 };
 const pipCls={"Bangladesh":"pip-bd","Indian":"pip-in","International":"pip-int","Sports":"pip-sp","FIFA 2026":"pip-fifa"};
 const tagCls={"Bangladesh":"#5b9bff","Indian":"#f0b440","International":"#4fd0e8","Sports":"#b39bff","FIFA 2026":"#ffd700"};
@@ -847,18 +826,25 @@ function updateClock(){
   const h=String(now.getHours()).padStart(2,'0');
   const m=String(now.getMinutes()).padStart(2,'0');
   const s=String(now.getSeconds()).padStart(2,'0');
-  document.getElementById("clock-time").innerHTML=`${h}<span class="clock-colon">:</span>${m}<span class="clock-colon">:</span>${s}`;
+  const el = document.getElementById("clock-time");
+  if(el) el.innerHTML=`${h}<span class="clock-colon">:</span>${m}<span class="clock-colon">:</span>${s}`;
+  
   const days=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
   const months=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-  const d=now.getDate();const mo=months[now.getMonth()];const y=now.getFullYear();
-  document.getElementById("clock-day").textContent=days[now.getDay()]+" ";
-  document.getElementById("clock-dmy").textContent=`${String(d).padStart(2,'0')} ${mo} ${y}`;
+  const d=now.getDate(); const mo=months[now.getMonth()]; const y=now.getFullYear();
+  
+  const dEl = document.getElementById("clock-day");
+  const dmyEl = document.getElementById("clock-dmy");
+  if(dEl) dEl.textContent=days[now.getDay()]+" ";
+  if(dmyEl) dmyEl.textContent=`${String(d).padStart(2,'0')} ${mo} ${y}`;
 }
-setInterval(updateClock,1000);updateClock();
+setInterval(updateClock,1000);
 
 /* ── BUILD CATS ── */
 function buildCats(){
   const c=document.getElementById("cats");
+  if(!c) return;
+  c.innerHTML = "";
   Object.keys(catCfg).forEach(cat=>{
     const b=document.createElement("button");
     b.className="cat-pill"+(cat===activeCat?" "+catCfg[cat].cls:"");
@@ -878,6 +864,7 @@ function buildCats(){
 /* ── RENDER SIDEBAR ── */
 function renderSidebar(){
   const s=document.getElementById("sidebar");
+  if(!s) return;
   const cats=activeCat==="All"?Object.keys(catCfg).filter(x=>x!=="All"):[activeCat];
   const mobile=isMobile();
 
@@ -927,7 +914,7 @@ function chCard(ch,mobile){
 
 function doFilter(){searchQ=document.getElementById("srch").value;renderSidebar();}
 
-/* ── SHOW/HIDE STATES ── */
+/* ── SHOW STATES ── */
 function showLoading(ch){
   document.getElementById("idle").style.display="none";
   document.getElementById("vwrap").style.display="none";
@@ -944,10 +931,10 @@ function showError(msg){
   setTimeout(()=>{e.style.display="none"},4000);
 }
 
-/* ── HLS ── */
+/* ── PLAYER LOGIC ── */
 function destroyHls(){
   if(hlsInst){hlsInst.destroy();hlsInst=null;}
-  const v=document.getElementById("vid");v.pause();v.src="";
+  const v=document.getElementById("vid"); if(v){v.pause();v.src="";}
 }
 
 function stopStream(){
@@ -970,7 +957,8 @@ function stopStream(){
 }
 
 function setPlayIcon(playing){
-  document.getElementById("play-icon").className=playing?"ti ti-player-pause":"ti ti-player-play";
+  const icon = document.getElementById("play-icon");
+  if(icon) icon.className=playing?"ti ti-player-pause":"ti ti-player-play";
 }
 
 function togglePlay(){
@@ -982,29 +970,25 @@ function togglePlay(){
 }
 
 function seekBack(){
-  if(!activeId){return;}
-  const ch=channels.find(c=>c.id===activeId);
-  if(ch)selectAndPlay(ch.id,true);
+  if(!activeId) return;
+  selectAndPlay(activeId,true);
 }
 
 function selectAndPlay(id,force=false){
-  if(activeId===id&&!force)return;
+  if(activeId===id && !force) return;
   activeId=id;renderSidebar();
   const ch=channels.find(c=>c.id===id);
 
   document.getElementById("ch-now").textContent=ch.name;
   document.getElementById("prog-t").textContent=ch.name;
   document.getElementById("prog-s").textContent=ch.cat+" · "+ch.sub;
-  
-  // DYNAMICALLY UPDATE BOTTOM OVERVIEW & EPG
-  document.getElementById("channel-desc").textContent=`You are currently watching ${ch.name} (${ch.sub}). Streamed live in high definition via NHLiveZone platform with zero latency tracking.`;
+  document.getElementById("channel-desc").textContent=`You are currently watching ${ch.name} (${ch.sub}). Streamed live in high definition via NHLiveZone platform.`;
   document.getElementById("epg-now").textContent=`${ch.name} Live Broadcast / Special Stream`;
 
   const tag=document.getElementById("live-tag");
   tag.style.background=tagCls[ch.cat]||"#5b9bff";
   document.getElementById("ptl").style.display="flex";
 
-  // update now logo
   const nl=document.getElementById("now-logo-wrap");
   if(ch.logo){
     nl.innerHTML=`<img src="${ch.logo}" alt="${ch.name}" style="width:100%;height:100%;object-fit:contain;border-radius:7px;background:var(--bg3);padding:2px" onerror="this.parentElement.innerHTML='<span>${ch.abbr||ch.name.substring(0,2)}</span>'">`;
@@ -1014,12 +998,11 @@ function selectAndPlay(id,force=false){
     nl.style.background=`${ch.bg||'var(--accent)'}`;nl.style.border="none";
   }
 
-  if(!ch.url){showError("Stream URL not added yet — coming soon!");return;}
+  if(!ch.url){showError("Stream URL coming soon!");return;}
 
   destroyHls();showLoading(ch);
-
   const vid=document.getElementById("vid");
-  vid.volume=document.querySelector("input[aria-label='Volume']").value/100;
+  vid.volume=document.querySelector("input[type='range']").value/100;
 
   let prog=0;
   const pi=setInterval(()=>{prog=Math.min(prog+Math.random()*8,90);document.getElementById("pbar").style.width=Math.round(prog)+"%";},150);
@@ -1035,7 +1018,7 @@ function selectAndPlay(id,force=false){
     qb.style.display="block";
     vid.play().catch(()=>{});
     isPlaying=true;setPlayIcon(true);
-    setTimeout(()=>{document.getElementById("pbar").style.width="35%"},400);
+    setTimeout(()=>{document.getElementById("pbar").style.width="0%"},400);
   }
 
   if(Hls.isSupported()){
@@ -1059,18 +1042,17 @@ function selectAndPlay(id,force=false){
     clearInterval(pi);
     document.getElementById("loading").style.display="none";
     document.getElementById("idle").style.display="flex";
-    showError("Your browser does not support HLS");
+    showError("Browser not supporting HLS");
   }
 }
 
-/* ── QUALITY ── */
-function toggleQMenu(){
-  document.getElementById("qmenu").classList.toggle("open");
-}
+/* ── UTILS ── */
+function toggleQMenu(){ document.getElementById("qmenu").classList.toggle("open"); }
 document.addEventListener("click",e=>{
   if(!document.getElementById("qwrap").contains(e.target))
     document.getElementById("qmenu").classList.remove("open");
 });
+
 function setQuality(q){
   currentQuality=q;
   document.querySelectorAll(".qopt").forEach(x=>x.classList.remove("active"));
@@ -1090,7 +1072,6 @@ function setQuality(q){
   }
 }
 
-/* ── FS / VOLUME / MUTE ── */
 function doFS(){
   const el=document.getElementById("screen");
   if(!document.fullscreenElement)el.requestFullscreen&&el.requestFullscreen();
@@ -1101,17 +1082,11 @@ function toggleMute(){
   const ico=v.muted?'<i class="ti ti-volume-off"></i>':'<i class="ti ti-volume"></i>';
   document.getElementById("mutebtn").innerHTML=ico;
   document.getElementById("mutebtn2").innerHTML=ico;
-  document.getElementById("mutebtn").classList.toggle("active",v.muted);
-  document.getElementById("mutebtn2").classList.toggle("active",v.muted);
 }
-function setVol(val){
-  const v=document.getElementById("vid");v.volume=val/100;v.muted=val==0;
-}
+function setVol(val){ const v=document.getElementById("vid"); if(v){v.volume=val/100; v.muted=val==0;} }
 
-/* ── LIVE CHAT FUNCTIONALITY ── */
-function handleChatKey(e) {
-  if (e.key === 'Enter') sendChat();
-}
+/* ── CHAT ── */
+function handleChatKey(e) { if (e.key === 'Enter') sendChat(); }
 function sendChat() {
   const inp = document.getElementById("chat-input");
   const text = inp.value.trim();
@@ -1125,9 +1100,13 @@ function sendChat() {
   box.scrollTop = box.scrollHeight;
 }
 
-/* ── RESIZE ── */
+/* ── INITIALIZATION ── */
 let lastMobile=isMobile();
 window.addEventListener("resize",()=>{const m=isMobile();if(m!==lastMobile){lastMobile=m;renderSidebar();}});
 
-buildCats();renderSidebar();
+window.addEventListener("DOMContentLoaded", () => {
+  updateClock();
+  buildCats();
+  renderSidebar();
+});
 </script>
