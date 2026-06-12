@@ -335,7 +335,184 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
 .vol-row input{width:68px;accent-color:var(--accent)}
 .divider{width:1px;height:20px;background:var(--border);flex-shrink:0}
 
-/* ── footer ── */
+/* ══════════════ NEW: PLAYER BOTTOM CONTENT ══════════════ */
+.player-bottom-area {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  background: var(--bg);
+}
+.bottom-left {
+  flex: 1.6;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+.bottom-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 280px;
+}
+.info-card, .schedule-card, .chat-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+.info-heading {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.info-heading i {
+  color: var(--accent);
+}
+#channel-desc {
+  font-size: 12.5px;
+  color: var(--text2);
+  line-height: 1.5;
+}
+.schedule-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.epg-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  gap: 10px;
+}
+.epg-item.active {
+  border-color: rgba(79, 125, 240, 0.3);
+  background: rgba(79, 125, 240, 0.05);
+}
+.epg-time {
+  font-size: 11px;
+  color: var(--text3);
+  font-weight: 500;
+  white-space: nowrap;
+}
+.epg-title {
+  font-size: 12.5px;
+  color: var(--text);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.epg-status {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--green);
+  background: rgba(74, 222, 128, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* Chat Panel Styles */
+.chat-card {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 250px;
+  overflow: hidden;
+}
+.chat-header {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg3);
+}
+.chat-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.chat-title i { color: var(--accent2); }
+.chat-count {
+  font-size: 11px;
+  color: var(--text2);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.chat-messages {
+  flex: 1;
+  padding: 12px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.chat-msg {
+  font-size: 12px;
+  line-height: 1.4;
+}
+.chat-user {
+  font-weight: 600;
+  margin-right: 4px;
+}
+.chat-text {
+  color: var(--text2);
+}
+.chat-input-wrap {
+  padding: 10px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 8px;
+  background: var(--bg3);
+}
+.chat-input-wrap input {
+  flex: 1;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  padding: 8px 12px;
+  color: var(--text);
+  font-size: 12px;
+  outline: none;
+}
+.chat-input-wrap input:focus {
+  border-color: var(--accent);
+}
+.chat-input-wrap button {
+  background: var(--accent);
+  border: none;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.chat-input-wrap button:hover {
+  background: #3b66c4;
+}
+
+/* ── FOOTER ── */
 .footer{
   display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
   padding:8px 16px;border-top:1px solid var(--border);background:var(--bg2);flex-shrink:0;
@@ -385,18 +562,28 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
   .vol-row input{flex:1}
   .divider{display:none}
   .ctrl-bar{gap:8px;padding:7px 10px}
+  
+  .player-bottom-area {
+    flex-direction: column;
+    overflow: visible;
+    padding: 12px;
+  }
+  .bottom-right {
+    min-width: 0;
+  }
+  .chat-card {
+    height: 300px;
+  }
+  
   .footer{padding:7px 12px;flex-direction:column;align-items:flex-start;gap:3px}
 }
 </style>
 
 <div class="tv-app">
 
-  <!-- TOP BAR -->
   <div class="topbar">
-    <!-- Brand with logo SVG -->
     <div class="brand">
       <div class="brand-svg">
-        <!-- NH logo mark in SVG (simplified version of the uploaded logo) -->
         <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:30px;height:30px">
           <defs>
             <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
@@ -408,11 +595,8 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
               <stop offset="100%" stop-color="#ffffff"/>
             </linearGradient>
           </defs>
-          <!-- N letter with play triangle -->
           <path d="M4 8 L4 28 L10 28 L10 15 L18 28 L22 28 L22 8 L16 8 L16 21 L8 8 Z" fill="url(#g1)"/>
-          <!-- Play triangle inside N -->
           <path d="M6 12 L13 18 L6 24 Z" fill="rgba(255,255,255,0.3)"/>
-          <!-- H letter -->
           <path d="M25 8 L25 28 L31 28 L31 20 L36 20 L36 28 L36 8 L36 8 L36 16 L31 16 L31 8 Z" fill="url(#g2)" opacity=".9"/>
         </svg>
       </div>
@@ -428,7 +612,6 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
 
     <div class="topbar-spacer"></div>
 
-    <!-- Digital Clock -->
     <div class="digital-clock">
       <div>
         <div class="clock-time" id="clock-time">00<span class="clock-colon">:</span>00<span class="clock-colon">:</span>00</div>
@@ -436,20 +619,15 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
       </div>
     </div>
 
-    <!-- Category row (2nd line) -->
     <div class="cat-row" id="cats"></div>
   </div>
 
-  <!-- BODY -->
   <div class="body">
 
-    <!-- SIDEBAR -->
     <div class="sidebar" id="sidebar"></div>
 
-    <!-- PLAYER COLUMN -->
     <div class="player-col">
 
-      <!-- PLAYER SCREEN -->
       <div class="player-screen" id="screen">
         <div class="screen-grad" id="screen-grad"></div>
         <div class="player-tl" id="ptl" style="display:none">
@@ -458,7 +636,6 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
         </div>
         <div class="quality-badge" id="quality-badge">AUTO</div>
 
-        <!-- Idle -->
         <div class="idle-state" id="idle">
           <div class="idle-logo-wrap">
             <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -480,21 +657,18 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
           <div class="idle-sub">Select a channel to start watching</div>
         </div>
 
-        <!-- Loading -->
         <div class="loading-state" id="loading">
           <img id="loading-logo" class="loading-logo" src="" alt="" style="display:none"/>
           <div class="spinner"></div>
           <span class="loading-ch" id="loading-ch">Loading…</span>
         </div>
 
-        <!-- Video -->
         <div class="video-wrap" id="vwrap"><video id="vid"></video></div>
         <div class="err-msg" id="errmsg"></div>
       </div>
 
       <div class="pbar-wrap"><div class="pbar-fill" id="pbar"></div></div>
 
-      <!-- PLAY CONTROLS BAR -->
       <div class="ctrl-bar">
         <button class="ctrl-btn" onclick="seekBack()" title="Restart / Reload" aria-label="Reload">
           <i class="ti ti-player-skip-back"></i>
@@ -508,7 +682,6 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
 
         <div style="flex:1"></div>
 
-        <!-- Quality selector -->
         <div class="quality-wrap" id="qwrap">
           <button class="ctrl-btn" onclick="toggleQMenu()" title="Quality" aria-label="Quality" id="qbtn" style="width:auto;border-radius:6px;padding:0 10px;gap:5px;font-size:11px;font-weight:600;color:var(--text2)">
             <i class="ti ti-settings" style="font-size:14px"></i>
@@ -531,7 +704,6 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
         </button>
       </div>
 
-      <!-- NOW BAR -->
       <div class="now-bar">
         <div class="now-brand">
           <div class="now-logo" id="now-logo-wrap"><span>Nh</span></div>
@@ -551,10 +723,65 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
           </button>
         </div>
       </div>
+
+      <div class="player-bottom-area">
+        <div class="bottom-left">
+          <div class="info-card">
+            <h3 class="info-heading"><i class="ti ti-info-circle"></i> Channel Overview</h3>
+            <p id="channel-desc">Welcome to NHLiveZone. Select a channel from the sidebar to view live streaming and information schedule.</p>
+          </div>
+
+          <div class="schedule-card">
+            <h3 class="info-heading"><i class="ti ti-calendar-time"></i> Today's Schedule (EPG)</h3>
+            <div class="schedule-list" id="epg-list">
+              <div class="epg-item active">
+                <span class="epg-time">10:00 PM - 11:30 PM</span>
+                <span class="epg-title" id="epg-now">বাজেটের রাজনীতি (Talk Show)</span>
+                <span class="epg-status">LIVE NOW</span>
+              </div>
+              <div class="epg-item">
+                <span class="epg-time">11:30 PM - 12:30 AM</span>
+                <span class="epg-title">রাতের প্রধান সংবাদ (Nightly News)</span>
+              </div>
+              <div class="epg-item">
+                <span class="epg-time">12:30 AM - 01:30 AM</span>
+                <span class="epg-title">টক শো: সমসাময়িক বাংলাদেশ</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bottom-right">
+          <div class="chat-card">
+            <div class="chat-header">
+              <span class="chat-title"><i class="ti ti-messages"></i> Stream Chat</span>
+              <span class="chat-count"><span class="pulse"></span> 1.2K Online</span>
+            </div>
+            <div class="chat-messages" id="chat-box">
+              <div class="chat-msg">
+                <span class="chat-user" style="color: #5b9bff;">Sabbir:</span>
+                <span class="chat-text">Stream quality khub e valo! 🔥</span>
+              </div>
+              <div class="chat-msg">
+                <span class="chat-user" style="color: #ffd700;">Rana:</span>
+                <span class="chat-text">Buffer charai choltese, thanks admin! ❤️</span>
+              </div>
+              <div class="chat-msg">
+                <span class="chat-user" style="color: #4ade80;">Anika:</span>
+                <span class="chat-text">Finally high-quality bangla iptv platform pelam.</span>
+              </div>
+            </div>
+            <div class="chat-input-wrap">
+              <input type="text" id="chat-input" placeholder="Type a message..." onkeypress="handleChatKey(event)">
+              <button onclick="sendChat()"><i class="ti ti-send"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
-  <!-- FOOTER -->
   <div class="footer">
     <div class="footer-privacy">🔒 We do not collect or share your personal data.</div>
     <div class="footer-copy">© 2026 NHLiveZone · Made with ❤️ by <a href="https://www.facebook.com/iamnhrana" target="_blank" rel="noopener">NhZone</a></div>
@@ -585,298 +812,4 @@ const channels=[
   {id:13,name:"NTV",cat:"Bangladesh",sub:"Entertainment",logo:"https://tstatic.akash-go.com/cms-ui/images/custom-content/1735560841094.png",url:"https://owrcovcrpy.gpcdn.net/bpk-tv/1716/output/index.m3u8"},
   {id:14,name:"BTV Shangshad",cat:"Bangladesh",sub:"News",logo:"https://tstatic.akash-go.com/cms-ui/images/custom-content/1781166550297.png",url:"https://owrcovcrpy.gpcdn.net/bpk-tv/1709/output/index.m3u8"},
   {id:15,name:"Independent TV",cat:"Bangladesh",sub:"News",logo:"https://tstatic.akash-go.com/cms-ui/images/custom-content/1778087037971.png",url:"https://owrcovcrpy.gpcdn.net/bpk-tv/1704/output/index.m3u8"},
-  {id:16,name:"Channel 1",cat:"Bangladesh",sub:"News",logo:"https://tstatic.akash-go.com/cms-ui/images/custom-content/1781163068414.png",url:"https://owrcovcrpy.gpcdn.net/bpk-tv/1702/output/index.m3u8"},
-  // Indian
-  {id:17,name:"Zee Bangla",cat:"Indian",sub:"Entertainment",abbr:"Zee",bg:"#1f3a26",txt:"#9be3b4",url:null},
-  {id:18,name:"Star Jalsha",cat:"Indian",sub:"Entertainment",abbr:"SJL",bg:"#4a3a14",txt:"#fbe7c6",url:null},
-  {id:19,name:"Aaj Tak",cat:"Indian",sub:"News",abbr:"AAJ",bg:"#4a1f1f",txt:"#ffc3c3",url:null},
-  // International
-  {id:20,name:"BBC World",cat:"International",sub:"News",abbr:"BBC",bg:"#1d3f56",txt:"#cdeaff",url:null},
-  {id:21,name:"Al Jazeera",cat:"International",sub:"News",abbr:"AJZ",bg:"#1f3a30",txt:"#9be3c4",url:null},
-  {id:22,name:"CNN",cat:"International",sub:"News",abbr:"CNN",bg:"#4a2a1f",txt:"#ffcdb8",url:null},
-  // Sports
-  {id:23,name:"T Sports",cat:"Sports",sub:"Sports",abbr:"TSP",bg:"#1f3a30",txt:"#9be3c4",url:null},
-  {id:24,name:"Star Sports 1",cat:"Sports",sub:"Sports",abbr:"SS1",bg:"#1d3f56",txt:"#cdeaff",url:null},
-  {id:25,name:"ESPN",cat:"Sports",sub:"Sports",abbr:"ESPN",bg:"#4a1f1f",txt:"#ffc3c3",url:null},
-];
-
-const catCfg={
-  "FIFA 2026":{cls:"on-fifa",icon:"ti-trophy"},
-  "All":      {cls:"on-all", icon:"ti-device-tv"},
-  "Bangladesh":{cls:"on-bd", icon:"ti-flag"},
-  "Indian":   {cls:"on-in",  icon:"ti-map-pin"},
-  "International":{cls:"on-int",icon:"ti-world"},
-  "Sports":   {cls:"on-sp",  icon:"ti-ball-football"},
-};
-const pipCls={"Bangladesh":"pip-bd","Indian":"pip-in","International":"pip-int","Sports":"pip-sp","FIFA 2026":"pip-fifa"};
-const tagCls={"Bangladesh":"#5b9bff","Indian":"#f0b440","International":"#4fd0e8","Sports":"#b39bff","FIFA 2026":"#ffd700"};
-
-let activeCat="FIFA 2026",activeId=null,searchQ="",hlsInst=null,isPlaying=false,currentQuality="auto";
-const isMobile=()=>window.innerWidth<=680;
-
-/* ── CLOCK ── */
-function updateClock(){
-  const now=new Date();
-  const h=String(now.getHours()).padStart(2,'0');
-  const m=String(now.getMinutes()).padStart(2,'0');
-  const s=String(now.getSeconds()).padStart(2,'0');
-  document.getElementById("clock-time").innerHTML=`${h}<span class="clock-colon">:</span>${m}<span class="clock-colon">:</span>${s}`;
-  const days=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-  const months=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-  const d=now.getDate();const mo=months[now.getMonth()];const y=now.getFullYear();
-  document.getElementById("clock-day").textContent=days[now.getDay()]+" ";
-  document.getElementById("clock-dmy").textContent=`${String(d).padStart(2,'0')} ${mo} ${y}`;
-}
-setInterval(updateClock,1000);updateClock();
-
-/* ── BUILD CATS ── */
-function buildCats(){
-  const c=document.getElementById("cats");
-  Object.keys(catCfg).forEach(cat=>{
-    const b=document.createElement("button");
-    b.className="cat-pill"+(cat===activeCat?" "+catCfg[cat].cls:"");
-    b.dataset.cat=cat;
-    const icon=cat==="FIFA 2026"?`<i class="ti ti-trophy" style="font-size:11px;color:#ffd700"></i>`:`<i class="ti ${catCfg[cat].icon}" style="font-size:11px"></i>`;
-    b.innerHTML=icon+cat;
-    b.onclick=()=>{
-      activeCat=cat;
-      document.querySelectorAll(".cat-pill").forEach(x=>{x.className="cat-pill"});
-      b.className="cat-pill "+catCfg[cat].cls;
-      renderSidebar();
-    };
-    c.appendChild(b);
-  });
-}
-
-/* ── RENDER SIDEBAR ── */
-function renderSidebar(){
-  const s=document.getElementById("sidebar");
-  const cats=activeCat==="All"?Object.keys(catCfg).filter(x=>x!=="All"):[activeCat];
-  const mobile=isMobile();
-
-  if(mobile){
-    let html='<div class="mobile-scroll">';
-    cats.forEach(cat=>{
-      channels.filter(c=>c.cat===cat&&matches(c)).forEach(ch=>{ html+=chCard(ch,true); });
-    });
-    html+='</div>';
-    const found=cats.some(cat=>channels.filter(c=>c.cat===cat&&matches(c)).length>0);
-    if(!found)html=emptyHtml();
-    s.innerHTML=html;
-  } else {
-    let html="";
-    cats.forEach(cat=>{
-      const chs=channels.filter(c=>c.cat===cat&&matches(c));
-      if(!chs.length)return;
-      const isFifa=cat==="FIFA 2026";
-      html+=`<div class="section-label${isFifa?" fifa-label":""}">
-        <i class="ti ${catCfg[cat].icon}" style="font-size:12px"></i>${cat}
-        ${isFifa?`<span style="font-size:9px;margin-left:2px;opacity:.7">⚽ Live Now</span>`:""}
-      </div>`;
-      chs.forEach(ch=>{ html+=chCard(ch,false); });
-    });
-    if(!html)html=emptyHtml();
-    s.innerHTML=html;
-  }
-}
-
-function matches(c){return c.name.toLowerCase().includes(searchQ.toLowerCase())||c.sub.toLowerCase().includes(searchQ.toLowerCase())}
-function emptyHtml(){return '<div class="no-ch"><i class="ti ti-search"></i>No channels found</div>'}
-
-function chCard(ch,mobile){
-  const logoEl=ch.logo?`<img class="ch-logo" src="${ch.logo}" alt="${ch.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:``;
-  const avEl=ch.logo
-    ?`<div class="ch-avatar" style="background:${ch.bg||'var(--bg3)'};color:${ch.txt||'var(--text2)'};display:none">${ch.abbr||ch.name.substring(0,3).toUpperCase()}</div>`
-    :`<div class="ch-avatar" style="background:${ch.bg||'var(--bg3)'};color:${ch.txt||'var(--text2)'}">${ch.abbr||ch.name.substring(0,3).toUpperCase()}</div>`;
-  const noUrl=!ch.url?" no-url":"";
-  const pip=`<div class="live-pip ${pipCls[ch.cat]||'pip-bd'}"></div>`;
-  return `<div class="ch-card${activeId===ch.id?" active":""}${noUrl}" onclick="selectAndPlay(${ch.id})">
-    <div style="position:relative;flex-shrink:0">${logoEl}${avEl}</div>
-    <div class="ch-meta"><div class="ch-n">${ch.name}</div><div class="ch-s">${ch.sub}</div></div>
-    ${pip}
-    ${!ch.url&&!mobile?`<span class="soon-tag">Soon</span>`:`<span></span>`}
-  </div>`;
-}
-
-function doFilter(){searchQ=document.getElementById("srch").value;renderSidebar();}
-
-/* ── SHOW/HIDE STATES ── */
-function showLoading(ch){
-  document.getElementById("idle").style.display="none";
-  document.getElementById("vwrap").style.display="none";
-  document.getElementById("screen-grad").style.display="none";
-  document.getElementById("quality-badge").style.display="none";
-  const ld=document.getElementById("loading");ld.style.display="flex";
-  document.getElementById("loading-ch").textContent="Loading "+ch.name+"…";
-  const ll=document.getElementById("loading-logo");
-  if(ch.logo){ll.src=ch.logo;ll.style.display="block";}else{ll.style.display="none";}
-  document.getElementById("pbar").style.width="0%";
-}
-function showError(msg){
-  const e=document.getElementById("errmsg");e.textContent=msg;e.style.display="block";
-  setTimeout(()=>{e.style.display="none"},4000);
-}
-
-/* ── HLS ── */
-function destroyHls(){
-  if(hlsInst){hlsInst.destroy();hlsInst=null;}
-  const v=document.getElementById("vid");v.pause();v.src="";
-}
-
-function stopStream(){
-  destroyHls();activeId=null;isPlaying=false;
-  document.getElementById("vwrap").style.display="none";
-  document.getElementById("loading").style.display="none";
-  document.getElementById("idle").style.display="flex";
-  document.getElementById("ptl").style.display="none";
-  document.getElementById("screen-grad").style.display="none";
-  document.getElementById("quality-badge").style.display="none";
-  document.getElementById("prog-t").textContent="NHLiveZone";
-  document.getElementById("prog-s").textContent="Select a channel to start";
-  document.getElementById("pbar").style.width="0%";
-  setPlayIcon(false);
-  const nl=document.getElementById("now-logo-wrap");
-  nl.innerHTML="<span>Nh</span>";nl.style.cssText="";
-  renderSidebar();
-}
-
-function setPlayIcon(playing){
-  document.getElementById("play-icon").className=playing?"ti ti-player-pause":"ti ti-player-play";
-}
-
-function togglePlay(){
-  const v=document.getElementById("vid");
-  if(!activeId){showError("Select a channel first");return;}
-  if(v.paused||v.ended){v.play().catch(()=>{});isPlaying=true;}
-  else{v.pause();isPlaying=false;}
-  setPlayIcon(isPlaying);
-}
-
-function seekBack(){
-  if(!activeId){return;}
-  const ch=channels.find(c=>c.id===activeId);
-  if(ch)selectAndPlay(ch.id,true);
-}
-
-function selectAndPlay(id,force=false){
-  if(activeId===id&&!force)return;
-  activeId=id;renderSidebar();
-  const ch=channels.find(c=>c.id===id);
-
-  document.getElementById("ch-now").textContent=ch.name;
-  document.getElementById("prog-t").textContent=ch.name;
-  document.getElementById("prog-s").textContent=ch.cat+" · "+ch.sub;
-  const tag=document.getElementById("live-tag");
-  tag.style.background=tagCls[ch.cat]||"#5b9bff";
-  document.getElementById("ptl").style.display="flex";
-
-  // update now logo
-  const nl=document.getElementById("now-logo-wrap");
-  if(ch.logo){
-    nl.innerHTML=`<img src="${ch.logo}" alt="${ch.name}" style="width:100%;height:100%;object-fit:contain;border-radius:7px;background:var(--bg3);padding:2px" onerror="this.parentElement.innerHTML='<span>${ch.abbr||ch.name.substring(0,2)}</span>'">`;
-    nl.style.background="var(--bg3)";nl.style.border="1px solid var(--border)";
-  } else {
-    nl.innerHTML=`<span>${ch.abbr||ch.name.substring(0,2).toUpperCase()}</span>`;
-    nl.style.background=`${ch.bg||'var(--accent)'}`;nl.style.border="none";
-  }
-
-  if(!ch.url){showError("Stream URL not added yet — coming soon!");return;}
-
-  destroyHls();showLoading(ch);
-
-  const vid=document.getElementById("vid");
-  vid.volume=document.querySelector("input[aria-label='Volume']").value/100;
-
-  let prog=0;
-  const pi=setInterval(()=>{prog=Math.min(prog+Math.random()*8,90);document.getElementById("pbar").style.width=Math.round(prog)+"%";},150);
-
-  function onReady(){
-    clearInterval(pi);
-    document.getElementById("pbar").style.width="100%";
-    document.getElementById("loading").style.display="none";
-    document.getElementById("vwrap").style.display="block";
-    document.getElementById("screen-grad").style.display="block";
-    const qb=document.getElementById("quality-badge");
-    qb.textContent=currentQuality==="auto"?"AUTO":currentQuality+"p";
-    qb.style.display="block";
-    vid.play().catch(()=>{});
-    isPlaying=true;setPlayIcon(true);
-    setTimeout(()=>{document.getElementById("pbar").style.width="35%"},400);
-  }
-
-  if(Hls.isSupported()){
-    hlsInst=new Hls({enableWorker:true,lowLatencyMode:true,startLevel:-1});
-    hlsInst.loadSource(ch.url);
-    hlsInst.attachMedia(vid);
-    hlsInst.on(Hls.Events.MANIFEST_PARSED,onReady);
-    hlsInst.on(Hls.Events.ERROR,(_,d)=>{
-      if(d.fatal){
-        clearInterval(pi);
-        document.getElementById("loading").style.display="none";
-        document.getElementById("idle").style.display="flex";
-        showError("Stream failed — please try again");
-        isPlaying=false;setPlayIcon(false);
-      }
-    });
-  } else if(vid.canPlayType("application/vnd.apple.mpegurl")){
-    vid.src=ch.url;
-    vid.addEventListener("loadedmetadata",onReady,{once:true});
-  } else {
-    clearInterval(pi);
-    document.getElementById("loading").style.display="none";
-    document.getElementById("idle").style.display="flex";
-    showError("Your browser does not support HLS");
-  }
-}
-
-/* ── QUALITY ── */
-function toggleQMenu(){
-  document.getElementById("qmenu").classList.toggle("open");
-}
-document.addEventListener("click",e=>{
-  if(!document.getElementById("qwrap").contains(e.target))
-    document.getElementById("qmenu").classList.remove("open");
-});
-function setQuality(q){
-  currentQuality=q;
-  document.querySelectorAll(".qopt").forEach(x=>x.classList.remove("active"));
-  document.querySelector(`.qopt[data-q="${q}"]`).classList.add("active");
-  document.getElementById("qbtn-label").textContent=q==="auto"?"Quality":q+"p";
-  document.getElementById("qmenu").classList.remove("open");
-  const qb=document.getElementById("quality-badge");
-  if(qb.style.display!=="none") qb.textContent=q==="auto"?"AUTO":q+"p";
-  if(hlsInst){
-    if(q==="auto"){hlsInst.currentLevel=-1;}
-    else{
-      const levels=hlsInst.levels;
-      let best=-1,bestDiff=99999;
-      levels.forEach((l,i)=>{const diff=Math.abs(l.height-parseInt(q));if(diff<bestDiff){bestDiff=diff;best=i;}});
-      if(best>=0)hlsInst.currentLevel=best;
-    }
-  }
-}
-
-/* ── FS / VOLUME / MUTE ── */
-function doFS(){
-  const el=document.getElementById("screen");
-  if(!document.fullscreenElement)el.requestFullscreen&&el.requestFullscreen();
-  else document.exitFullscreen&&document.exitFullscreen();
-}
-function toggleMute(){
-  const v=document.getElementById("vid");v.muted=!v.muted;
-  const ico=v.muted?'<i class="ti ti-volume-off"></i>':'<i class="ti ti-volume"></i>';
-  document.getElementById("mutebtn").innerHTML=ico;
-  document.getElementById("mutebtn2").innerHTML=ico;
-  document.getElementById("mutebtn").classList.toggle("active",v.muted);
-  document.getElementById("mutebtn2").classList.toggle("active",v.muted);
-}
-function setVol(val){
-  const v=document.getElementById("vid");v.volume=val/100;v.muted=val==0;
-}
-
-/* ── RESIZE ── */
-let lastMobile=isMobile();
-window.addEventListener("resize",()=>{const m=isMobile();if(m!==lastMobile){lastMobile=m;renderSidebar();}});
-
-buildCats();renderSidebar();
-</script>
+  {id:16,name:"Channel 1",cat:"Bangladesh",sub:"News",logo:"https://tstatic.akash-go.com/cms-ui/images/custom-content/1781163068414.png",url:"
