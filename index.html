@@ -95,6 +95,7 @@ body { background: var(--bg-main); color: var(--text-main); height: 100vh; overf
 .cat-btn { display: flex; align-items: center; gap: 6px; padding: 8px 16px; background: transparent; border: 1px solid var(--border); border-radius: 20px; color: var(--text-main); font-size: 13px; font-weight: 500; cursor: pointer; transition: 0.2s; white-space: nowrap; }
 .cat-btn:hover { border-color: var(--text-muted); }
 .cat-btn.active { border-color: var(--red); color: var(--red); }
+.cat-btn.fifa { border-color: var(--fifa); color: var(--fifa); }
 
 /* --- PLAYER AREA --- */
 .player-container { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: var(--radius-lg); overflow: hidden; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid var(--border); margin-bottom: 20px; }
@@ -160,7 +161,7 @@ body { background: var(--bg-main); color: var(--text-main); height: 100vh; overf
 .msg-text { font-size: 13px; color: var(--text-muted); line-height: 1.4; }
 .chat-input-area { padding: 16px 20px; border-top: 1px solid var(--border); position: relative; }
 .chat-input { width: 100%; background: var(--bg-main); border: 1px solid var(--border); border-radius: 20px; padding: 12px 40px 12px 16px; color: var(--text-main); font-size: 13px; outline: none; }
-.send-btn { position: absolute; right: 26px; top: 50%; transform: translateY(-50%); background: var(--red); border: none; width: 28px; height: 28px; border-radius: 50%; color: #fff; cursor: pointer; }
+.send-btn { position: absolute; right: 26px; top: 50%; transform: translateY(-50%); background: var(--red); border: none; width: 28px; height: 28px; border-radius: 50%; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center;}
 .schedule-widget { height: 280px; }
 .schedule-list { overflow-y: auto; padding: 0 20px 20px; display: flex; flex-direction: column; gap: 16px; }
 .epg-item { display: flex; gap: 16px; align-items: center; }
@@ -175,6 +176,10 @@ body { background: var(--bg-main); color: var(--text-main); height: 100vh; overf
 .app-footer { height: 60px; background: var(--bg-main); border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; font-size: 12px; color: var(--text-dim); flex-shrink: 0; }
 .footer-links { display: flex; gap: 20px; }
 .footer-links a { color: var(--text-dim); text-decoration: none; }
+.footer-links a:hover { color: var(--text-main); }
+.social-icons { display: flex; gap: 12px; }
+.social-icons i { font-size: 18px; cursor: pointer; transition: 0.2s; }
+.social-icons i:hover { color: #fff; }
 
 @media (max-width: 1024px) { .sidebar-right { display: none; } }
 @media (max-width: 768px) { .sidebar-left, .top-nav { display: none; } .main-wrapper { flex-direction: column; } .content-center { padding: 12px; } .video-meta { flex-direction: column; gap: 16px; } }
@@ -223,10 +228,12 @@ body { background: var(--bg-main); color: var(--text-main); height: 100vh; overf
         <a class="menu-item cat-menu active"><i class="ti ti-layout-grid"></i> All Channels</a>
         <a class="menu-item cat-menu"><i class="ti ti-flag"></i> Bangladesh</a>
         <a class="menu-item cat-menu"><i class="ti ti-map-pin"></i> India</a>
+        <a class="menu-item cat-menu"><i class="ti ti-world"></i> International</a>
         <a class="menu-item cat-menu"><i class="ti ti-ball-football"></i> Sports</a>
       </div>
       <div class="menu-section">
         <div class="menu-title">Popular Channels</div>
+        <!-- Channels will load here by JS -->
         <div id="left-channel-list"></div>
       </div>
     </aside>
@@ -239,6 +246,7 @@ body { background: var(--bg-main); color: var(--text-main); height: 100vh; overf
         <button class="cat-btn">India</button>
         <button class="cat-btn">International</button>
         <button class="cat-btn"><i class="ti ti-ball-football"></i> Sports</button>
+        <button class="cat-btn fifa"><i class="ti ti-trophy"></i> FIFA 2026</button>
       </div>
 
       <!-- PLAYER -->
@@ -261,6 +269,7 @@ body { background: var(--bg-main); color: var(--text-main); height: 100vh; overf
               </div>
               <div class="controls-right">
                 <span class="quality-text">1080p</span>
+                <i class="ti ti-settings ctrl-icon"></i>
                 <i class="ti ti-maximize ctrl-icon" onclick="doFS()"></i>
               </div>
             </div>
@@ -276,6 +285,7 @@ body { background: var(--bg-main); color: var(--text-main); height: 100vh; overf
         </div>
         <div class="meta-actions">
           <button class="action-btn"><i class="ti ti-plus"></i> Favorite</button>
+          <button class="action-btn"><i class="ti ti-share-3"></i> Share</button>
         </div>
       </div>
 
@@ -284,25 +294,30 @@ body { background: var(--bg-main); color: var(--text-main); height: 100vh; overf
       <div class="card-row drag-scroll">
         <div class="show-card">
           <div class="card-top"><span>10:24 PM</span> <span class="card-live">LIVE</span></div>
-          <div class="card-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b2/Sony_SAB_2022.png" alt="SAB"></div>
+          <div class="card-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b2/Sony_SAB_2022.png" onerror="this.src='https://placehold.co/80x40/151a28/ffffff?text=SAB'" alt="SAB"></div>
           <div class="card-title">Taarak Mehta Ka...</div>
         </div>
         <div class="show-card">
           <div class="card-top"><span>10:24 PM</span> <span class="card-live">LIVE</span></div>
-          <div class="card-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Star_Sports_1.svg/512px-Star_Sports_1.svg.png" alt="TSports"></div>
+          <div class="card-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Star_Sports_1.svg/512px-Star_Sports_1.svg.png" onerror="this.src='https://placehold.co/80x40/151a28/ffffff?text=T-Sports'" alt="TSports"></div>
           <div class="card-title">Sports News</div>
         </div>
         <div class="show-card">
           <div class="card-top"><span>10:24 PM</span> <span class="card-live">LIVE</span></div>
-          <div class="card-logo"><img src="https://upload.wikimedia.org/wikipedia/en/thumb/5/5a/Star_Jalsha_logo.svg/1200px-Star_Jalsha_logo.svg.png" alt="Jalsha" style="filter:drop-shadow(0 0 5px #fff)"></div>
+          <div class="card-logo"><img src="https://upload.wikimedia.org/wikipedia/en/thumb/5/5a/Star_Jalsha_logo.svg/1200px-Star_Jalsha_logo.svg.png" onerror="this.src='https://placehold.co/80x40/151a28/ffffff?text=Jalsha'" alt="Jalsha" style="filter:drop-shadow(0 0 5px #fff)"></div>
           <div class="card-title">Anurager Chhowa</div>
+        </div>
+        <div class="show-card">
+          <div class="card-top"><span>10:24 PM</span> <span class="card-live">LIVE</span></div>
+          <div class="card-logo"><img src="https://tstatic.akash-go.com/cms-ui/images/custom-content/1739962961772.png" onerror="this.src='https://placehold.co/80x40/151a28/ffffff?text=ATN'" alt="ATN"></div>
+          <div class="card-title">News Hour</div>
         </div>
       </div>
 
       <div class="section-header" style="margin-top:24px;"><h3 class="section-title">FIFA 2026 – Road to Glory</h3></div>
       <div class="card-row drag-scroll">
-        <div class="fifa-card"><img src="https://digitalhub.fifa.com/transform/5cd0bc72-fb5a-4632-9092-2bd1bd5ccf0e/1442431627?io=transform:fill,height:868,width:1536&quality=100" alt="fifa"><div class="fifa-grad"><span class="card-live" style="position:absolute;top:12px;right:12px;">LIVE</span><div class="card-title" style="color:#fff">Road to FIFA 2026</div></div></div>
-        <div class="fifa-card"><img src="https://digitalhub.fifa.com/transform/c60010c2-5c1a-4f51-b924-f72675971ce4/1442434526?io=transform:fill,height:868,width:1536&quality=100" alt="fifa"><div class="fifa-grad"><span class="card-live" style="position:absolute;top:12px;right:12px;">LIVE</span><div class="card-title" style="color:#fff">World Cup Qualifiers</div></div></div>
+        <div class="fifa-card"><img src="https://digitalhub.fifa.com/transform/5cd0bc72-fb5a-4632-9092-2bd1bd5ccf0e/1442431627?io=transform:fill,height:868,width:1536&quality=100" onerror="this.src='https://placehold.co/240x135/151a28/ffffff?text=FIFA+Live'" alt="fifa"><div class="fifa-grad"><span class="card-live" style="position:absolute;top:12px;right:12px;">LIVE</span><div class="card-title" style="color:#fff">Road to FIFA 2026</div></div></div>
+        <div class="fifa-card"><img src="https://digitalhub.fifa.com/transform/c60010c2-5c1a-4f51-b924-f72675971ce4/1442434526?io=transform:fill,height:868,width:1536&quality=100" onerror="this.src='https://placehold.co/240x135/151a28/ffffff?text=FIFA+Live'" alt="fifa"><div class="fifa-grad"><span class="card-live" style="position:absolute;top:12px;right:12px;">LIVE</span><div class="card-title" style="color:#fff">World Cup Qualifiers</div></div></div>
       </div>
       <div style="height: 40px;"></div>
     </main>
@@ -312,13 +327,16 @@ body { background: var(--bg-main); color: var(--text-main); height: 100vh; overf
       <div class="right-widget chat-widget">
         <div class="widget-header"><span class="widget-title">Live Chat</span></div>
         <div class="chat-messages" id="chat-box">
-          <div class="chat-msg"><img class="chat-avatar" src="https://i.pravatar.cc/150?img=11" alt="user"><div class="msg-content"><div class="msg-head"><span class="msg-name">Rasel Ahmed</span></div><div class="msg-text">Sony SAB chaloo ase!</div></div></div>
+          <div class="chat-msg"><img class="chat-avatar" src="https://ui-avatars.com/api/?name=Rasel+Ahmed&background=random" alt="user"><div class="msg-content"><div class="msg-head"><span class="msg-name">Rasel Ahmed</span></div><div class="msg-text">Sony SAB chaloo ase!</div></div></div>
+          <div class="chat-msg"><img class="chat-avatar" src="https://ui-avatars.com/api/?name=Tanvir+Hossain&background=random" alt="user"><div class="msg-content"><div class="msg-head"><span class="msg-name">Tanvir Hossain</span></div><div class="msg-text">Khub valo quality 👌</div></div></div>
         </div>
         <div class="chat-input-area">
           <input type="text" class="chat-input" id="chat-input" placeholder="Type a message..." onkeypress="if(event.key === 'Enter') sendChat()">
           <button class="send-btn" onclick="sendChat()"><i class="ti ti-send"></i></button>
         </div>
       </div>
+      
+      <!-- Premium Box -->
       <div class="premium-right">
         <i class="ti ti-crown"></i>
         <h3>Go Premium</h3>
@@ -328,24 +346,172 @@ body { background: var(--bg-main); color: var(--text-main); height: 100vh; overf
 
   </div>
 
+  <!-- FOOTER -->
+  <footer class="app-footer">
+    <div>© 2026 NHLiveZone. All Rights Reserved.</div>
+    <div class="footer-links">
+      <a href="#">About Us</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Contact Us</a>
+    </div>
+    <div class="social-icons">
+      <i class="ti ti-brand-facebook"></i>
+      <i class="ti ti-brand-youtube"></i>
+    </div>
+  </footer>
+
 <!-- EXTERNAL JAVASCRIPT -->
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.7/dist/hls.min.js"></script>
 <script>
-/* ── DATA (Replace urls with your own valid .m3u8 links) ── */
-const channels = [
-  {id:1, name:"Al Jazeera Live", cat:"News", logo:"https://upload.wikimedia.org/wikipedia/en/thumb/f/f2/Al_Jazeera_English_logo.svg/1200px-Al_Jazeera_English_logo.svg.png", url:"https://live-hls-web-aje.getaj.net/AJE/index.m3u8"},
-  {id:2, name:"Test Stream", cat:"Entertainment", logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Star_Sports_1.svg/512px-Star_Sports_1.svg.png", url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
-  {id:103, name:"Sony SAB", cat:"Entertainment", logo:"https://upload.wikimedia.org/wikipedia/commons/b/b2/Sony_SAB_2022.png", url:"http://172.27.27.3:801/16_SonySAB/index.m3u8"}, // This is your local IP, works only on your network
+/* ── ORIGINAL CHANNELS RESTORED ── */
+const channels=[
+  {id:103,name:"Sony SAB",cat:"Entertainment",logo:"https://upload.wikimedia.org/wikipedia/commons/b/b2/Sony_SAB_2022.png",url:"http://172.27.27.3:801/16_SonySAB/index.m3u8"},
+  {id:1,name:"Somoy TV",cat:"News",logo:"https://tstatic.akash-go.com/cms-ui/images/custom-content/1735560213832.png",url:"https://owrcovcrpy.gpcdn.net/bpk-tv/1701/output/index.m3u8"},
+  {id:24,name:"T Sports HD",cat:"Sports",logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Star_Sports_1.svg/512px-Star_Sports_1.svg.png",url:"#"},
+  {id:18,name:"Star Jalsha",cat:"Entertainment",logo:"https://upload.wikimedia.org/wikipedia/en/thumb/5/5a/Star_Jalsha_logo.svg/1200px-Star_Jalsha_logo.svg.png",url:"#"},
+  {id:6,name:"ATN Bangla",cat:"News",logo:"https://tstatic.akash-go.com/cms-ui/images/custom-content/1739962961772.png",url:"#"}
 ];
 
-let activeId = null; let hlsInst = null; let isPlaying = false;
+let activeId = null; 
+let hlsInst = null; 
+let isPlaying = false;
 
 /* ── CLOCK ── */
 function updateClock(){
-  const now = new Date(); let h = now.getHours(); const m = String(now.getMinutes()).padStart(2,'0'); const ampm = h >= 12 ? 'PM' : 'AM';
-  h = h % 12 || 12; document.getElementById("clock-time").textContent = `${h}:${m} ${ampm}`;
+  const now = new Date(); 
+  let h = now.getHours(); 
+  const m = String(now.getMinutes()).padStart(2,'0'); 
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12; 
+  document.getElementById("clock-time").textContent = `${h}:${m} ${ampm}`;
+  
+  const days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  document.getElementById("clock-date").textContent = `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()}`;
 }
-setInterval(updateClock, 1000); updateClock();
+setInterval(updateClock, 1000); 
+updateClock();
+
+/* ── RENDER LEFT CHANNELS (Fixed the empty list) ── */
+function renderSidebar(){
+  const container = document.getElementById("left-channel-list");
+  let html = "";
+  channels.forEach(ch => {
+    // Added an error fallback for image logos if wikipedia blocks them
+    html += `
+      <div class="channel-list-item ${activeId === ch.id ? 'active' : ''}" onclick="playChannel(${ch.id})">
+        <img class="ch-logo-sm" src="${ch.logo}" onerror="this.src='https://placehold.co/32x32/151a28/ffffff?text=TV'" alt="${ch.name}">
+        <div class="ch-info">
+          <div class="ch-name">${ch.name}</div>
+          <div class="ch-cat">${ch.cat}</div>
+        </div>
+        <div class="meta-live-tag">LIVE</div>
+      </div>
+    `;
+  });
+  container.innerHTML = html;
+}
+
+/* ── PLAYER LOGIC ── */
+function playChannel(id) {
+  activeId = id;
+  renderSidebar();
+  const ch = channels.find(c => c.id === id);
+  
+  document.getElementById("ch-title").innerHTML = `${ch.name} <i class="ti ti-rosette-discount-check-filled"></i>`;
+  document.getElementById("ch-sub").textContent = ch.cat + " Channel";
+  
+  const vid = document.getElementById("vid");
+  const ui = document.getElementById("player-ui");
+  const msg = document.getElementById("player-msg");
+  
+  msg.style.display = "flex";
+  msg.innerHTML = `<div style="width:30px;height:30px;border:3px solid var(--accent);border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite"></div><p style="margin-top:10px">Loading ${ch.name}...</p>`;
+  ui.style.display = "none";
+  
+  if(hlsInst) { hlsInst.destroy(); hlsInst = null; }
+  
+  if(!ch.url || ch.url === "#") {
+    setTimeout(() => {
+      msg.innerHTML = `<i class="ti ti-alert-circle" style="font-size:48px; color:var(--red); margin-bottom:10px"></i><p>Stream link not available yet</p>`;
+    }, 1000);
+    return;
+  }
+
+  function startPlayback() {
+    msg.style.display = "none";
+    ui.style.display = "flex";
+    vid.play().catch(()=>{});
+    isPlaying = true;
+    updatePlayIcon();
+  }
+
+  if(Hls.isSupported()) {
+    hlsInst = new Hls();
+    hlsInst.loadSource(ch.url);
+    hlsInst.attachMedia(vid);
+    hlsInst.on(Hls.Events.MANIFEST_PARSED, startPlayback);
+    hlsInst.on(Hls.Events.ERROR, function(event, data) {
+      if (data.fatal) {
+         msg.style.display = "flex";
+         ui.style.display = "none";
+         msg.innerHTML = `<i class="ti ti-wifi-off" style="font-size:48px; color:var(--red); margin-bottom:10px"></i><p>Network or Stream Error</p>`;
+      }
+    });
+  } else if (vid.canPlayType('application/vnd.apple.mpegurl')) {
+    vid.src = ch.url;
+    vid.addEventListener('loadedmetadata', startPlayback);
+  }
+}
+
+function updatePlayIcon() {
+  const icon = document.getElementById("playbtn");
+  icon.className = isPlaying ? "ti ti-player-pause ctrl-icon" : "ti ti-player-play ctrl-icon";
+}
+
+function togglePlay() {
+  const vid = document.getElementById("vid");
+  if(vid.paused) { vid.play(); isPlaying = true; }
+  else { vid.pause(); isPlaying = false; }
+  updatePlayIcon();
+}
+
+function toggleMute() {
+  const vid = document.getElementById("vid");
+  vid.muted = !vid.muted;
+  document.getElementById("mutebtn").className = vid.muted ? "ti ti-volume-off ctrl-icon" : "ti ti-volume ctrl-icon";
+}
+
+function doFS() {
+  const el = document.getElementById("player-box");
+  if (!document.fullscreenElement) el.requestFullscreen();
+  else document.exitFullscreen();
+}
+
+/* ── CHAT LOGIC ── */
+function sendChat() {
+  const inp = document.getElementById("chat-input");
+  const text = inp.value.trim();
+  if (!text) return;
+  const box = document.getElementById("chat-box");
+  
+  const now = new Date();
+  let h = now.getHours(); const m = String(now.getMinutes()).padStart(2,'0'); const ampm = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  
+  const msg = document.createElement("div");
+  msg.className = "chat-msg";
+  msg.innerHTML = `
+    <div style="width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:bold;color:#fff">Me</div>
+    <div class="msg-content">
+      <div class="msg-head"><span class="msg-name" style="color:var(--accent)">You</span> <span class="msg-time" style="font-size:11px;color:var(--text-dim)">${h}:${m} ${ampm}</span></div>
+      <div class="msg-text">${text}</div>
+    </div>
+  `;
+  box.appendChild(msg);
+  inp.value = "";
+  box.scrollTop = box.scrollHeight;
+}
 
 /* ── UI INTERACTIONS ── */
 document.querySelectorAll('.top-nav a, .menu-item, .cat-btn').forEach(btn => {
@@ -356,13 +522,23 @@ document.querySelectorAll('.top-nav a, .menu-item, .cat-btn').forEach(btn => {
   });
 });
 
-/* ── DRAG TO SCROLL (Horizontal Carousels) ── */
+/* ── DRAG TO SCROLL (Fully Completed) ── */
 const sliders = document.querySelectorAll('.drag-scroll, .category-pills');
 let isDown = false; let startX; let scrollLeft;
 
 sliders.forEach(slider => {
   slider.addEventListener('mousedown', (e) => {
-    isDown = true; slider.style.cursor = 'grabbing'; startX = e.pageX - slider.offsetLeft; scrollLeft = slider.scrollLeft;
+    isDown = true; 
+    slider.style.cursor = 'grabbing'; 
+    startX = e.pageX - slider.offsetLeft; 
+    scrollLeft = slider.scrollLeft;
   });
-  slider.addEventListener('mouseleave', () => { isDown = false; slider.style.cursor = 'grab'; });
-  slider.addEventListener('mouseup', () => { isDown = false; slider.style.cursorNormally I can help with things like this, but I don't seem to have access to that content. You can try again or ask me for something else.
+  slider.addEventListener('mouseleave', () => { 
+    isDown = false; 
+    slider.style.cursor = 'grab'; 
+  });
+  slider.addEventListener('mouseup', () => { 
+    isDown = false; 
+    slider.style.cursor = 'grab'; 
+  });
+  slider.addEventListenerNormally I can help with things like this, but I don't seem to have access to that content. You can try again or ask me for something else.
