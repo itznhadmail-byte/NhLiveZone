@@ -1,803 +1,820 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>NHLiveZone</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NHLiveZone – Live TV & FIFA 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
 <style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Poppins,sans-serif;
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0f;
+  --bg2:#12121a;
+  --bg3:#1a1a26;
+  --bg4:#22223a;
+  --border:rgba(255,255,255,0.07);
+  --border2:rgba(255,255,255,0.13);
+  --text:#f0f0ff;
+  --text2:#9090b8;
+  --text3:#55557a;
+  --accent:#4f6ef7;
+  --accent2:#7c5cf0;
+  --gold:#ffd700;
+  --red:#ef4444;
+  --green:#22c55e;
+  --live-red:#ef4444;
+  --radius:12px;
+  --radius-sm:8px;
 }
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden}
 
-body{
-background:#070b14;
-color:#fff;
+/* ── LAYOUT ── */
+.app{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+.main{display:flex;flex:1;min-height:0}
+
+/* ── TOPNAV ── */
+.topnav{
+  display:flex;align-items:center;gap:16px;
+  padding:0 24px;height:60px;
+  background:rgba(10,10,15,0.95);
+  border-bottom:1px solid var(--border);
+  flex-shrink:0;z-index:100;
+  backdrop-filter:blur(12px);
+  position:sticky;top:0;
 }
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
+.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,#1a2a5e,#0d1830);border-radius:9px;display:flex;align-items:center;justify-content:center}
+.logo-icon svg{width:24px;height:24px}
+.logo-text{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;letter-spacing:.01em;line-height:1}
+.logo-text .nh{background:linear-gradient(135deg,#5b9bff,#7c5cf0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.logo-text .live{color:#fff}
+.logo-text .zone{background:linear-gradient(135deg,#7c5cf0,#4fd0e8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.logo-tv{font-size:18px;margin-left:2px}
 
-.navbar{
-height:70px;
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:0 25px;
-background:#0f172a;
+.nav-search{
+  flex:1;max-width:480px;
+  display:flex;align-items:center;gap:10px;
+  background:var(--bg3);border:1px solid var(--border2);border-radius:50px;
+  padding:0 18px;height:40px;
+  transition:border-color .2s,box-shadow .2s;
 }
+.nav-search:focus-within{border-color:rgba(79,110,247,0.5);box-shadow:0 0 0 3px rgba(79,110,247,0.1)}
+.nav-search input{background:transparent;border:none;outline:none;color:var(--text);font-size:13.5px;width:100%;font-family:'Inter',sans-serif}
+.nav-search input::placeholder{color:var(--text3)}
+.nav-search i{color:var(--text3);font-size:15px;flex-shrink:0}
 
-.logo{
-font-size:28px;
-font-weight:700;
+.nav-right{display:flex;align-items:center;gap:12px;margin-left:auto}
+.premium-btn{
+  display:flex;align-items:center;gap:6px;
+  background:linear-gradient(135deg,#7c5cf0,#4f6ef7);
+  border:none;border-radius:50px;padding:8px 16px;
+  color:#fff;font-size:13px;font-weight:600;cursor:pointer;
+  font-family:'Inter',sans-serif;
+  box-shadow:0 4px 15px rgba(79,110,247,0.35);
+  transition:transform .15s,box-shadow .15s;
 }
-
-.logo span{
-color:#3b82f6;
+.premium-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(79,110,247,0.5)}
+.notif-btn{
+  position:relative;width:38px;height:38px;border-radius:50%;
+  background:var(--bg3);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:background .15s;
 }
-
-.search{
-width:260px;
-height:42px;
-border:none;
-border-radius:10px;
-padding:0 15px;
-background:#1e293b;
-color:white;
+.notif-btn:hover{background:var(--bg4)}
+.notif-badge{
+  position:absolute;top:4px;right:4px;
+  width:16px;height:16px;border-radius:50%;
+  background:var(--red);font-size:9px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  border:2px solid var(--bg);
 }
+.user-area{display:flex;align-items:center;gap:10px;cursor:pointer}
+.user-avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid var(--accent);background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--accent)}
+.user-info{line-height:1.3}
+.user-name{font-size:13px;font-weight:600;color:var(--text)}
+.user-role{font-size:10px;color:var(--gold);font-weight:600}
 
-.hero-player{
-display:grid;
-grid-template-columns:2fr 1fr;
-gap:20px;
-padding:20px;
+/* ── SIDEBAR ── */
+.sidebar{
+  width:210px;min-width:210px;
+  background:var(--bg2);
+  border-right:1px solid var(--border);
+  overflow-y:auto;
+  display:flex;flex-direction:column;
+  padding:16px 0;
+  scrollbar-width:thin;scrollbar-color:var(--bg4) transparent;
 }
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px}
 
-.player{
-background:#111827;
-border-radius:20px;
-overflow:hidden;
-height:500px;
+.nav-item{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 20px;cursor:pointer;
+  font-size:14px;font-weight:500;color:var(--text2);
+  border-left:3px solid transparent;
+  transition:all .15s;
+  text-decoration:none;
 }
+.nav-item:hover{background:var(--bg3);color:var(--text)}
+.nav-item.active{background:rgba(79,110,247,0.1);color:#fff;border-left-color:var(--accent)}
+.nav-item svg,.nav-item .ni{font-size:18px;flex-shrink:0;width:20px;text-align:center}
+.nav-sep{height:1px;background:var(--border);margin:10px 16px}
+.nav-section-label{font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--text3);padding:10px 20px 4px;text-transform:uppercase}
 
-.player video{
-width:100%;
-height:100%;
+.upgrade-box{
+  margin:12px;border-radius:var(--radius);
+  background:linear-gradient(135deg,rgba(79,110,247,0.15),rgba(124,92,240,0.1));
+  border:1px solid rgba(79,110,247,0.2);
+  padding:16px;
 }
-
-.schedule{
-background:#111827;
-border-radius:20px;
-padding:20px;
+.upgrade-box h4{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
+.upgrade-box p{font-size:11px;color:var(--text2);line-height:1.5;margin-bottom:12px}
+.upgrade-btn-sm{
+  width:100%;padding:9px;border-radius:var(--radius-sm);
+  background:linear-gradient(135deg,#7c5cf0,#4f6ef7);
+  border:none;color:#fff;font-size:12px;font-weight:700;
+  cursor:pointer;font-family:'Inter',sans-serif;
+  transition:opacity .15s;
 }
+.upgrade-btn-sm:hover{opacity:.85}
 
-.section{
-padding:20px;
+/* ── CONTENT ── */
+.content{flex:1;display:flex;min-width:0;overflow:hidden}
+.feed{flex:1;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--bg4) transparent}
+.feed::-webkit-scrollbar{width:4px}
+.feed::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:4px}
+
+/* ── HERO ── */
+.hero{
+  position:relative;width:100%;height:320px;
+  background:linear-gradient(135deg,#050a1a 0%,#0a0f2e 40%,#0d1535 100%);
+  overflow:hidden;cursor:pointer;
 }
-
-.section-title{
-font-size:22px;
-margin-bottom:15px;
+.hero-bg{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 65% 50%,rgba(15,30,80,0.8) 0%,transparent 60%),
+    linear-gradient(to right,rgba(5,10,26,0.98) 0%,rgba(5,10,26,0.7) 40%,rgba(5,10,26,0.1) 70%,transparent 100%);
 }
-
-.row{
-display:flex;
-gap:15px;
-overflow-x:auto;
+.hero-stadium{
+  position:absolute;right:0;top:0;width:65%;height:100%;
+  background:linear-gradient(135deg,#0d1535,#1a2a5e);
+  display:flex;align-items:center;justify-content:center;
+  font-size:100px;
+  overflow:hidden;
 }
-
-.card{
-min-width:220px;
-background:#111827;
-border-radius:16px;
-padding:15px;
-cursor:pointer;
-transition:.3s;
+.hero-stadium::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at center,rgba(79,110,247,0.15),transparent 70%);
 }
-
-.card:hover{
-transform:translateY(-4px);
+.hero-player-emoji{font-size:120px;position:relative;z-index:1;filter:drop-shadow(0 0 30px rgba(79,110,247,0.4))}
+.hero-content{position:absolute;left:28px;top:50%;transform:translateY(-50%);z-index:2;max-width:420px}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:6px;
+  background:linear-gradient(135deg,rgba(255,215,0,0.15),rgba(255,165,0,0.1));
+  border:1px solid rgba(255,215,0,0.3);
+  border-radius:4px;padding:3px 10px;
+  font-size:11px;font-weight:700;color:var(--gold);
+  letter-spacing:.06em;margin-bottom:12px;
 }
-
-.live{
-color:red;
-font-size:12px;
-font-weight:700;
+.hero-title{font-size:34px;font-weight:800;line-height:1.1;color:#fff;margin-bottom:6px;letter-spacing:-.01em}
+.hero-title span{background:linear-gradient(135deg,#4f6ef7,#7c5cf0,#4fd0e8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:13px;color:rgba(255,255,255,.6);margin-bottom:16px}
+.hero-live-label{
+  display:inline-flex;align-items:center;gap:7px;margin-bottom:18px;
 }
+.live-pill{
+  display:flex;align-items:center;gap:5px;
+  background:var(--live-red);border-radius:4px;
+  padding:3px 9px;font-size:11px;font-weight:700;color:#fff;letter-spacing:.05em;
+}
+.live-dot{width:6px;height:6px;border-radius:50%;background:#fff;animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.7)}}
+.hero-match{font-size:15px;font-weight:700;color:#fff}
+.hero-btns{display:flex;gap:10px}
+.btn-watch{
+  display:flex;align-items:center;gap:8px;
+  background:linear-gradient(135deg,#4f6ef7,#7c5cf0);
+  border:none;border-radius:8px;padding:11px 22px;
+  color:#fff;font-size:14px;font-weight:700;cursor:pointer;
+  font-family:'Inter',sans-serif;
+  box-shadow:0 4px 18px rgba(79,110,247,0.4);
+  transition:transform .15s,box-shadow .15s;
+}
+.btn-watch:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(79,110,247,0.55)}
+.btn-info{
+  display:flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.15);
+  border-radius:8px;padding:11px 20px;
+  color:#fff;font-size:14px;font-weight:600;cursor:pointer;
+  font-family:'Inter',sans-serif;backdrop-filter:blur(8px);
+  transition:background .15s;
+}
+.btn-info:hover{background:rgba(255,255,255,0.14)}
+.hero-dots{position:absolute;bottom:14px;left:28px;display:flex;gap:6px}
+.dot{width:20px;height:4px;border-radius:2px;background:rgba(255,255,255,.25);transition:background .2s}
+.dot.on{background:var(--accent);width:28px}
 
+/* ── SECTION ── */
+.section{padding:20px 24px 4px}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.section-title{font-size:16px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px}
+.view-all{font-size:12.5px;color:var(--accent);font-weight:600;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:4px}
+.view-all:hover{color:#7c5cf0}
+
+/* ── CHANNEL CARDS ── */
+.ch-row{display:flex;gap:12px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}
+.ch-row::-webkit-scrollbar{display:none}
+.ch-card{
+  flex-shrink:0;width:160px;cursor:pointer;
+  border-radius:var(--radius);overflow:hidden;
+  background:var(--bg2);border:1px solid var(--border);
+  transition:transform .2s,border-color .2s,box-shadow .2s;
+  position:relative;
+}
+.ch-card:hover{transform:translateY(-3px);border-color:var(--border2);box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.ch-logo-wrap{
+  height:95px;background:var(--bg3);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+  border-bottom:1px solid var(--border);
+}
+.ch-logo-wrap.dark-red{background:linear-gradient(135deg,#1a0a0a,#2a0f0f)}
+.ch-logo-wrap.dark-blue{background:linear-gradient(135deg,#0a0f1a,#0d1830)}
+.ch-logo-wrap.dark-green{background:linear-gradient(135deg,#0a1a0f,#0f2218)}
+.ch-logo-wrap.dark-purple{background:linear-gradient(135deg,#120a1a,#1a0f2a)}
+.ch-logo-txt{font-size:24px;font-weight:900;letter-spacing:-.02em}
+.ch-logo-img{max-width:100%;max-height:70px;object-fit:contain}
+.ch-live-badge{
+  position:absolute;top:8px;right:8px;
+  background:var(--live-red);border-radius:4px;
+  padding:2px 7px;font-size:9px;font-weight:800;color:#fff;letter-spacing:.06em;
+}
+.ch-info{padding:10px 12px}
+.ch-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px}
+.ch-cat{font-size:11px;color:var(--text3)}
+
+/* ── MATCH CARDS ── */
+.match-row{display:flex;gap:12px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}
+.match-row::-webkit-scrollbar{display:none}
+.match-card{
+  flex-shrink:0;width:200px;
+  border-radius:var(--radius);overflow:hidden;
+  background:var(--bg2);border:1px solid var(--border);
+  cursor:pointer;transition:transform .2s,border-color .2s;
+  position:relative;
+}
+.match-card:hover{transform:translateY(-3px);border-color:var(--border2)}
+.match-img{
+  height:110px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:42px;gap:10px;
+  position:relative;overflow:hidden;
+}
+.match-img.arg-bra{background:linear-gradient(135deg,#1a2a0f,#0f2218)}
+.match-img.fra-ger{background:linear-gradient(135deg,#0f1a2a,#1a0f0a)}
+.match-img.por-eng{background:linear-gradient(135deg,#1a0f0a,#0a0f1a)}
+.match-img.spa-ita{background:linear-gradient(135deg,#1a1a0a,#0f0a1a)}
+.match-img.hl{background:linear-gradient(135deg,#0a0a1a,#1a0a1a)}
+.match-img::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(255,255,255,0.05),transparent 70%)}
+.match-live-badge{
+  position:absolute;top:8px;left:8px;
+  background:var(--live-red);border-radius:4px;
+  padding:2px 7px;font-size:9px;font-weight:800;color:#fff;letter-spacing:.06em;
+}
+.match-play-btn{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  opacity:0;background:rgba(0,0,0,.5);transition:opacity .2s;
+}
+.match-card:hover .match-play-btn{opacity:1}
+.match-info{padding:10px 12px}
+.match-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px}
+.match-round{font-size:11px;color:var(--text3)}
+.vs-sep{font-size:16px;opacity:.5}
+
+/* ── RIGHT PANEL ── */
+.right-panel{
+  width:280px;min-width:280px;
+  background:var(--bg2);border-left:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.rp-section{padding:16px;border-bottom:1px solid var(--border)}
+.rp-title{font-size:13px;font-weight:700;color:var(--text);display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.rp-title .live-badge-sm{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--live-red);font-weight:700}
+.rp-title .live-badge-sm span{width:6px;height:6px;border-radius:50%;background:var(--live-red);animation:pulse 1.4s ease-in-out infinite}
+
+/* Now Playing */
+.now-thumb{
+  width:100%;aspect-ratio:16/9;border-radius:var(--radius-sm);
+  background:linear-gradient(135deg,#0d1535,#1a2a5e);
+  overflow:hidden;position:relative;margin-bottom:10px;
+  display:flex;align-items:center;justify-content:center;font-size:40px;
+}
+.now-thumb .play-overlay{
+  position:absolute;bottom:8px;left:0;right:0;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 10px;
+}
+.now-ctrl{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;transition:background .15s}
+.now-ctrl:hover{background:rgba(255,255,255,.25)}
+.now-prog-bar{height:2px;background:rgba(255,255,255,.15);border-radius:2px;margin-bottom:8px;position:relative}
+.now-prog-fill{height:100%;background:var(--live-red);border-radius:2px;width:35%}
+.now-ch-name{font-size:13px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:6px;margin-bottom:2px}
+.now-ch-live{font-size:9px;font-weight:800;background:var(--live-red);color:#fff;padding:1px 5px;border-radius:3px}
+.now-ch-hd{font-size:9px;font-weight:700;background:var(--bg4);color:var(--text2);padding:1px 5px;border-radius:3px;border:1px solid var(--border2)}
+.now-show{font-size:11.5px;color:var(--text2);margin-bottom:2px}
+.now-time{font-size:10.5px;color:var(--text3)}
+
+/* Schedule */
+.sch-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.sch-item:last-child{border-bottom:none}
+.sch-time{font-size:11px;color:var(--text3);font-weight:500;width:52px;flex-shrink:0;padding-top:1px}
+.sch-meta{flex:1;min-width:0}
+.sch-name{font-size:12.5px;font-weight:600;color:var(--text);margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sch-sub{font-size:10.5px;color:var(--text3)}
+.sch-live{font-size:9px;font-weight:800;background:var(--live-red);color:#fff;padding:2px 6px;border-radius:3px;flex-shrink:0;margin-top:1px}
+
+/* Chat */
+.chat-area{flex:1;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:8px;scrollbar-width:none}
+.chat-area::-webkit-scrollbar{display:none}
+.chat-msg{display:flex;gap:9px;align-items:flex-start}
+.chat-avt{width:28px;height:28px;border-radius:50%;background:var(--bg4);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;border:1px solid var(--border2)}
+.chat-bubble{flex:1;min-width:0}
+.chat-user{font-size:11.5px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:6px}
+.chat-when{font-size:10px;color:var(--text3);font-weight:400}
+.chat-text{font-size:12px;color:var(--text2);margin-top:2px;line-height:1.4}
+.chat-online{font-size:11px;color:var(--green);display:flex;align-items:center;gap:5px}
+.chat-online span{width:6px;height:6px;border-radius:50%;background:var(--green)}
+
+.chat-input-row{
+  padding:12px 16px;border-top:1px solid var(--border);
+  display:flex;gap:8px;align-items:center;
+  background:var(--bg2);flex-shrink:0;
+}
+.chat-inp{
+  flex:1;background:var(--bg3);border:1px solid var(--border);
+  border-radius:50px;padding:8px 14px;
+  color:var(--text);font-size:12.5px;outline:none;
+  font-family:'Inter',sans-serif;
+  transition:border-color .15s;
+}
+.chat-inp:focus{border-color:rgba(79,110,247,0.4)}
+.chat-inp::placeholder{color:var(--text3)}
+.chat-send{
+  width:34px;height:34px;border-radius:50%;
+  background:linear-gradient(135deg,#4f6ef7,#7c5cf0);
+  border:none;color:#fff;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:transform .15s,box-shadow .15s;
+}
+.chat-send:hover{transform:scale(1.08);box-shadow:0 4px 12px rgba(79,110,247,0.4)}
+
+/* ── FOOTER ── */
 .footer{
-padding:30px;
-text-align:center;
-opacity:.7;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 24px;background:var(--bg2);border-top:1px solid var(--border);
+  flex-shrink:0;font-size:11.5px;flex-wrap:wrap;gap:8px;
 }
+.footer-links{display:flex;gap:18px}
+.footer-links a{color:var(--text3);text-decoration:none;transition:color .15s}
+.footer-links a:hover{color:var(--text2)}
+.footer-copy{color:var(--text3)}
+.footer-social{display:flex;gap:10px}
+.social-icon{width:28px;height:28px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s;font-size:12px}
+.social-icon:hover{background:var(--bg4)}
 
+/* ── UTIL ── */
+.icon{display:inline-block}
 </style>
 </head>
-
 <body>
+<div class="app">
 
-<header class="navbar">
+  <!-- TOP NAV -->
+  <nav class="topnav">
+    <a class="nav-logo" href="#">
+      <div class="logo-icon">
+        <svg viewBox="0 0 36 36" fill="none"><defs><linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#5b9bff"/><stop offset="100%" stop-color="#7c5cf0"/></linearGradient><linearGradient id="lg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#c8d8ff"/><stop offset="100%" stop-color="#fff"/></linearGradient></defs><path d="M3 6L3 26L8 26L8 14L16 26L20 26L20 6L15 6L15 18L7 6Z" fill="url(#lg1)"/><path d="M23 6L23 26L28 26L28 19L32 19L32 26L32 6L32 6L32 17L28 17L28 6Z" fill="url(#lg2)" opacity=".9"/></svg>
+      </div>
+      <span class="logo-text"><span class="nh">NH</span><span class="live">Live</span><span class="zone">Zone</span></span>
+      <span class="logo-tv">📺</span>
+    </a>
 
-<div class="logo">
-<span>NH</span>LiveZone
+    <div class="nav-search">
+      <span class="icon">🔍</span>
+      <input type="text" placeholder="Search for channels, matches, shows..."/>
+    </div>
+
+    <div class="nav-right">
+      <button class="premium-btn">⭐ Premium</button>
+      <div class="notif-btn">🔔<div class="notif-badge">5</div></div>
+      <div class="user-area">
+        <div class="user-avatar">N</div>
+        <div class="user-info">
+          <div class="user-name">NH Rana</div>
+          <div class="user-role">Premium User</div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="main">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <a class="nav-item active" href="#"><span class="ni">🏠</span> Home</a>
+      <a class="nav-item" href="#"><span class="ni">📺</span> Live TV</a>
+      <a class="nav-item" href="#"><span class="ni">🏅</span> Sports</a>
+      <a class="nav-item" href="#"><span class="ni">🏆</span> FIFA 2026</a>
+      <a class="nav-item" href="#"><span class="ni">🎬</span> Movies</a>
+      <a class="nav-item" href="#"><span class="ni">🎭</span> Series</a>
+      <a class="nav-item" href="#"><span class="ni">👶</span> Kids</a>
+      <a class="nav-item" href="#"><span class="ni">⭐</span> Premium</a>
+      <a class="nav-item" href="#"><span class="ni">📋</span> My Watchlist</a>
+      <a class="nav-item" href="#"><span class="ni">🕐</span> History</a>
+      <a class="nav-item" href="#"><span class="ni">⚙️</span> Settings</a>
+
+      <div class="nav-sep"></div>
+      <div class="nav-section-label">Top Categories</div>
+      <a class="nav-item" href="#"><span class="ni">📰</span> News</a>
+      <a class="nav-item" href="#"><span class="ni">🎪</span> Entertainment</a>
+      <a class="nav-item" href="#"><span class="ni">⚽</span> Sports</a>
+      <a class="nav-item" href="#"><span class="ni">🎵</span> Music</a>
+      <a class="nav-item" href="#"><span class="ni">🎥</span> Documentary</a>
+
+      <div style="flex:1"></div>
+      <div class="upgrade-box">
+        <h4>Upgrade to Premium</h4>
+        <p>Watch in Full HD & 4K<br>Ad-free experience</p>
+        <button class="upgrade-btn-sm">Upgrade Now</button>
+      </div>
+    </aside>
+
+    <!-- MAIN FEED -->
+    <div class="feed">
+
+      <!-- HERO -->
+      <div class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-stadium">
+          <span class="hero-player-emoji">⚽</span>
+        </div>
+        <div class="hero-content">
+          <div class="hero-eyebrow">🏆 FIFA WORLD CUP 2026</div>
+          <div class="hero-title">FIFA WORLD CUP<br><span>2026</span></div>
+          <div class="hero-sub">Every Match. Every Moment. Live in HD.</div>
+          <div class="hero-live-label">
+            <div class="live-pill"><span class="live-dot"></span>LIVE</div>
+            <span class="hero-match" style="margin-left:10px">Argentina vs Brazil</span>
+          </div>
+          <div class="hero-btns">
+            <button class="btn-watch">▶ Watch Now</button>
+            <button class="btn-info">ℹ More Info</button>
+          </div>
+        </div>
+        <div class="hero-dots">
+          <div class="dot on"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+      </div>
+
+      <!-- TRENDING CHANNELS -->
+      <div class="section">
+        <div class="section-head">
+          <div class="section-title">🔥 Trending Channels</div>
+          <a class="view-all" href="#">View All →</a>
+        </div>
+        <div class="ch-row">
+          <div class="ch-card">
+            <div class="ch-logo-wrap dark-red">
+              <span class="ch-logo-txt" style="color:#ff2020">T</span>
+              <div class="ch-live-badge">LIVE</div>
+            </div>
+            <div class="ch-info"><div class="ch-name">T Sports HD</div><div class="ch-cat">Sports</div></div>
+          </div>
+          <div class="ch-card">
+            <div class="ch-logo-wrap dark-blue">
+              <span style="color:#fff;font-size:13px;font-weight:800;letter-spacing:-.02em">jamuna<span style="color:#4f6ef7">tv</span></span>
+              <div class="ch-live-badge">LIVE</div>
+            </div>
+            <div class="ch-info"><div class="ch-name">Jamuna TV</div><div class="ch-cat">News</div></div>
+          </div>
+          <div class="ch-card">
+            <div class="ch-logo-wrap dark-green">
+              <span class="ch-logo-txt" style="color:#fff;font-size:20px;font-weight:900">Channel<br><span style="color:#22c55e;font-size:28px">24</span></span>
+              <div class="ch-live-badge">LIVE</div>
+            </div>
+            <div class="ch-info"><div class="ch-name">Channel 24</div><div class="ch-cat">News</div></div>
+          </div>
+          <div class="ch-card">
+            <div class="ch-logo-wrap" style="background:linear-gradient(135deg,#1a0a0f,#2a0f1a)">
+              <span class="ch-logo-txt" style="color:#ef4444;font-size:20px;font-weight:900">ATN<br><span style="color:#fff;font-size:14px">NEWS</span></span>
+              <div class="ch-live-badge">LIVE</div>
+            </div>
+            <div class="ch-info"><div class="ch-name">ATN News</div><div class="ch-cat">News</div></div>
+          </div>
+          <div class="ch-card">
+            <div class="ch-logo-wrap" style="background:linear-gradient(135deg,#0f1a0a,#1a2a0f)">
+              <span class="ch-logo-txt" style="color:#22c55e;font-size:18px;font-weight:900">সময়<br><span style="color:#fff;font-size:12px">TV</span></span>
+              <div class="ch-live-badge">LIVE</div>
+            </div>
+            <div class="ch-info"><div class="ch-name">Somoy TV</div><div class="ch-cat">News</div></div>
+          </div>
+          <div class="ch-card">
+            <div class="ch-logo-wrap dark-purple">
+              <span class="ch-logo-txt" style="color:#7c5cf0;font-size:18px;font-weight:900">DBC<br><span style="color:#fff;font-size:12px">NEWS</span></span>
+              <div class="ch-live-badge">LIVE</div>
+            </div>
+            <div class="ch-info"><div class="ch-name">DBC News HD</div><div class="ch-cat">News</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SPORTS CHANNELS -->
+      <div class="section">
+        <div class="section-head">
+          <div class="section-title">⚙️ Sports Channels</div>
+          <a class="view-all" href="#">View All →</a>
+        </div>
+        <div class="ch-row">
+          <div class="ch-card">
+            <div class="ch-logo-wrap dark-blue">
+              <div style="text-align:center"><div style="font-size:9px;color:#aaa;font-weight:700;letter-spacing:.05em">★</div><div style="font-size:18px;font-weight:900;color:#fff">STAR<br>SPORTS <span style="color:#4f6ef7">1</span></div></div>
+              <div class="ch-live-badge">LIVE</div>
+            </div>
+            <div class="ch-info"><div class="ch-name">Star Sports 1 HD</div><div class="ch-cat">Sports</div></div>
+          </div>
+          <div class="ch-card">
+            <div class="ch-logo-wrap" style="background:linear-gradient(135deg,#0a0f1a,#0d1830)">
+              <div style="text-align:center;color:#fff"><div style="font-size:13px;font-weight:900;letter-spacing:.05em">SONY</div><div style="font-size:20px;font-weight:900;color:#4f6ef7">SIX</div></div>
+              <div class="ch-live-badge">LIVE</div>
+            </div>
+            <div class="ch-info"><div class="ch-name">Sony Six HD</div><div class="ch-cat">Sports</div></div>
+          </div>
+          <div class="ch-card">
+            <div class="ch-logo-wrap" style="background:linear-gradient(135deg,#1a0505,#2a0a0a)">
+              <span style="color:#ef4444;font-size:28px;font-weight:900;letter-spacing:-.05em;font-style:italic">ESPN</span>
+              <div class="ch-live-badge">LIVE</div>
+            </div>
+            <div class="ch-info"><div class="ch-name">ESPN HD</div><div class="ch-cat">Sports</div></div>
+          </div>
+          <div class="ch-card">
+            <div class="ch-logo-wrap" style="background:linear-gradient(135deg,#0a100a,#0f1a0f)">
+              <span style="color:#c8f0c8;font-size:14px;font-weight:900;letter-spacing:.05em">EURO<br><span style="color:#fff;font-size:20px;letter-spacing:.1em">SPORT</span></span>
+              <div class="ch-live-badge">LIVE</div>
+            </div>
+            <div class="ch-info"><div class="ch-name">Eurosport HD</div><div class="ch-cat">Sports</div></div>
+          </div>
+          <div class="ch-card">
+            <div class="ch-logo-wrap" style="background:linear-gradient(135deg,#0a1a0a,#102010)">
+              <div style="text-align:center"><div style="font-size:12px;font-weight:900;color:#22c55e;letter-spacing:.05em">beIN</div><div style="font-size:18px;font-weight:900;color:#fff">SPORTS</div></div>
+              <div class="ch-live-badge">LIVE</div>
+            </div>
+            <div class="ch-info"><div class="ch-name">BeIN Sports HD</div><div class="ch-cat">Sports</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FIFA 2026 -->
+      <div class="section">
+        <div class="section-head">
+          <div class="section-title">🏆 FIFA 2026</div>
+          <a class="view-all" href="#">View All →</a>
+        </div>
+        <div class="match-row">
+          <div class="match-card">
+            <div class="match-img arg-bra">
+              🇦🇷<span class="vs-sep">vs</span>🇧🇷
+              <div class="match-live-badge">LIVE</div>
+              <div class="match-play-btn">▶</div>
+            </div>
+            <div class="match-info"><div class="match-title">Argentina vs Brazil</div><div class="match-round">Quarter Final</div></div>
+          </div>
+          <div class="match-card">
+            <div class="match-img fra-ger">
+              🇫🇷<span class="vs-sep">vs</span>🇩🇪
+              <div class="match-live-badge">LIVE</div>
+              <div class="match-play-btn">▶</div>
+            </div>
+            <div class="match-info"><div class="match-title">France vs Germany</div><div class="match-round">Quarter Final</div></div>
+          </div>
+          <div class="match-card">
+            <div class="match-img por-eng">
+              🇵🇹<span class="vs-sep">vs</span>🏴󠁧󠁢󠁥󠁮󠁧󠁿
+              <div class="match-live-badge">LIVE</div>
+              <div class="match-play-btn">▶</div>
+            </div>
+            <div class="match-info"><div class="match-title">Portugal vs England</div><div class="match-round">Round of 16</div></div>
+          </div>
+          <div class="match-card">
+            <div class="match-img spa-ita">
+              🇪🇸<span class="vs-sep">vs</span>🇮🇹
+              <div class="match-live-badge">LIVE</div>
+              <div class="match-play-btn">▶</div>
+            </div>
+            <div class="match-info"><div class="match-title">Spain vs Italy</div><div class="match-round">Round of 16</div></div>
+          </div>
+          <div class="match-card">
+            <div class="match-img hl" style="font-size:52px">🏆</div>
+            <div class="match-info"><div class="match-title">Highlights</div><div class="match-round">Top Moments</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTINUE WATCHING -->
+      <div class="section" style="padding-bottom:24px">
+        <div class="section-head">
+          <div class="section-title">▶ Continue Watching</div>
+          <a class="view-all" href="#">View All →</a>
+        </div>
+        <div class="ch-row">
+          <div class="ch-card">
+            <div class="ch-logo-wrap dark-red" style="height:80px">
+              <span style="font-size:30px">⚽</span>
+              <div class="ch-live-badge">LIVE</div>
+              <div style="position:absolute;bottom:0;left:0;right:0;height:3px;background:rgba(255,255,255,.1)"><div style="width:42%;height:100%;background:var(--live-red)"></div></div>
+            </div>
+            <div class="ch-info"><div class="ch-name">Argentina vs Brazil</div><div class="ch-cat">42% watched</div></div>
+          </div>
+          <div class="ch-card">
+            <div class="ch-logo-wrap dark-blue" style="height:80px">
+              <span style="font-size:30px">🎯</span>
+              <div style="position:absolute;bottom:0;left:0;right:0;height:3px;background:rgba(255,255,255,.1)"><div style="width:68%;height:100%;background:var(--accent)"></div></div>
+            </div>
+            <div class="ch-info"><div class="ch-name">T Sports HD</div><div class="ch-cat">68% watched</div></div>
+          </div>
+          <div class="ch-card">
+            <div class="ch-logo-wrap dark-green" style="height:80px">
+              <span style="font-size:30px">📺</span>
+              <div style="position:absolute;bottom:0;left:0;right:0;height:3px;background:rgba(255,255,255,.1)"><div style="width:25%;height:100%;background:var(--green)"></div></div>
+            </div>
+            <div class="ch-info"><div class="ch-name">Somoy TV</div><div class="ch-cat">25% watched</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FOOTER -->
+      <div class="footer">
+        <div class="footer-copy">© 2026 NHLiveZone. All Rights Reserved.</div>
+        <div class="footer-links">
+          <a href="#">About Us</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms & Conditions</a>
+          <a href="#">Contact Us</a>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:11px;color:var(--text3)">Follow Us</span>
+          <div class="footer-social">
+            <div class="social-icon">f</div>
+            <div class="social-icon">▶</div>
+            <div class="social-icon">📷</div>
+            <div class="social-icon">𝕏</div>
+          </div>
+        </div>
+      </div>
+    </div><!-- end feed -->
+
+    <!-- RIGHT PANEL -->
+    <div class="right-panel">
+
+      <!-- NOW PLAYING -->
+      <div class="rp-section">
+        <div class="rp-title">
+          Now Playing
+          <span class="live-badge-sm"><span></span>LIVE</span>
+        </div>
+        <div class="now-thumb">
+          <span style="font-size:48px">⚽</span>
+          <div class="play-overlay">
+            <div class="now-ctrl">⏸</div>
+            <div style="display:flex;gap:6px">
+              <div class="now-ctrl">⛶</div>
+              <div class="now-ctrl">⤢</div>
+            </div>
+          </div>
+        </div>
+        <div class="now-prog-bar"><div class="now-prog-fill"></div></div>
+        <div class="now-ch-name">T Sports HD <span class="now-ch-live">LIVE</span><span class="now-ch-hd">HD</span></div>
+        <div class="now-show">FIFA World Cup 2026 Qualifiers</div>
+        <div class="now-time">08:30 PM – 11:30 PM</div>
+      </div>
+
+      <!-- TODAY SCHEDULE -->
+      <div class="rp-section" style="flex:1;overflow-y:auto">
+        <div class="rp-title">Today Schedule <a href="#" style="font-size:11px;color:var(--accent);text-decoration:none">View All</a></div>
+        <div class="sch-item">
+          <span class="sch-time">08:30 PM</span>
+          <div class="sch-meta"><div class="sch-name">Argentina vs Brazil</div><div class="sch-sub">FIFA World Cup 2026</div></div>
+          <span class="sch-live">LIVE</span>
+        </div>
+        <div class="sch-item">
+          <span class="sch-time">11:30 PM</span>
+          <div class="sch-meta"><div class="sch-name">France vs Germany</div><div class="sch-sub">FIFA World Cup 2026</div></div>
+          <span class="sch-live">LIVE</span>
+        </div>
+        <div class="sch-item">
+          <span class="sch-time">02:30 AM</span>
+          <div class="sch-meta"><div class="sch-name">Sports Center</div><div class="sch-sub">ESPN</div></div>
+          <span class="sch-live">LIVE</span>
+        </div>
+        <div class="sch-item">
+          <span class="sch-time">03:30 AM</span>
+          <div class="sch-meta"><div class="sch-name">News at 10</div><div class="sch-sub">Jamuna TV</div></div>
+          <span class="sch-live">LIVE</span>
+        </div>
+        <div class="sch-item">
+          <span class="sch-time">04:00 AM</span>
+          <div class="sch-meta"><div class="sch-name">T Sports News</div><div class="sch-sub">T Sports HD</div></div>
+          <span class="sch-live">LIVE</span>
+        </div>
+      </div>
+
+      <!-- LIVE CHAT -->
+      <div class="rp-section" style="padding-bottom:0;border-bottom:none">
+        <div class="rp-title">
+          Live Chat
+          <span class="chat-online"><span></span>256</span>
+        </div>
+      </div>
+      <div class="chat-area">
+        <div class="chat-msg">
+          <div class="chat-avt" style="background:linear-gradient(135deg,#1a2a5e,#0d1830);color:#5b9bff">R</div>
+          <div class="chat-bubble">
+            <div class="chat-user">Rasel Ahmed <span class="chat-when">just now</span></div>
+            <div class="chat-text">Great match! Argentina 🔥</div>
+          </div>
+        </div>
+        <div class="chat-msg">
+          <div class="chat-avt" style="background:linear-gradient(135deg,#1a1a0a,#2a2a0f);color:#ffd700">M</div>
+          <div class="chat-bubble">
+            <div class="chat-user">MD Farhan <span class="chat-when">just now</span></div>
+            <div class="chat-text">Messi is the GOAT 🐐</div>
+          </div>
+        </div>
+        <div class="chat-msg">
+          <div class="chat-avt" style="background:linear-gradient(135deg,#1a0a1a,#2a0f2a);color:#b39bff">S</div>
+          <div class="chat-bubble">
+            <div class="chat-user">Sports Lover <span class="chat-when">just now</span></div>
+            <div class="chat-text">What a goal! 😍</div>
+          </div>
+        </div>
+        <div class="chat-msg">
+          <div class="chat-avt" style="background:linear-gradient(135deg,#0f1a2a,#1a2a40);color:#4fd0e8">N</div>
+          <div class="chat-bubble">
+            <div class="chat-user">NH Rana <span class="chat-when">just now</span></div>
+            <div class="chat-text">Enjoying the live stream! ❤️</div>
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-row">
+        <input class="chat-inp" type="text" placeholder="Type a message..."/>
+        <button class="chat-send">➤</button>
+      </div>
+    </div>
+
+  </div><!-- end main -->
 </div>
 
-<input
-class="search"
-placeholder="Search Channel">
+<script>
+// Animate hero dots
+let dot = 0;
+const dots = document.querySelectorAll('.dot');
+setInterval(()=>{
+  dots.forEach(d=>d.classList.remove('on'));
+  dot = (dot+1)%dots.length;
+  dots[dot].classList.add('on');
+},3000);
 
-</header>
+// Chat send
+document.querySelector('.chat-send').addEventListener('click',()=>{
+  const inp = document.querySelector('.chat-inp');
+  const txt = inp.value.trim();
+  if(!txt) return;
+  const area = document.querySelector('.chat-area');
+  const msg = document.createElement('div');
+  msg.className = 'chat-msg';
+  msg.innerHTML = `<div class="chat-avt" style="background:linear-gradient(135deg,#0f1a2a,#1a2a40);color:#4fd0e8">N</div><div class="chat-bubble"><div class="chat-user">NH Rana <span class="chat-when">just now</span></div><div class="chat-text">${txt}</div></div>`;
+  area.appendChild(msg);
+  area.scrollTop = area.scrollHeight;
+  inp.value = '';
+});
+document.querySelector('.chat-inp').addEventListener('keypress',e=>{
+  if(e.key==='Enter') document.querySelector('.chat-send').click();
+});
 
-<div class="hero-player">
-
-<div class="player">
-
-<video controls>
-</video>
-
-</div>
-
-<div class="schedule">
-
-<h3>Today's Schedule</h3>
-
-<br>
-
-<p>10:00 AM - Bangladesh vs Sri Lanka</p>
-<p>01:30 PM - Premier League</p>
-<p>04:00 PM - News at 4</p>
-
-</div>
-
-</div>
-
-<section class="section">
-
-<h2 class="section-title">
-🔥 Popular Channels
-</h2>
-
-<div class="row">
-
-<div class="card">
-<div class="live">● LIVE</div>
-<h3>T Sports HD</h3>
-</div>
-
-<div class="card">
-<div class="live">● LIVE</div>
-<h3>Jamuna TV</h3>
-</div>
-
-<div class="card">
-<div class="live">● LIVE</div>
-<h3>Channel 24</h3>
-</div>
-
-</div>
-
-</section>
-
-<section class="section">
-
-<h2 class="section-title">
-⚽ Sports Channels
-</h2>
-
-<div class="row">
-
-<div class="card">
-Star Sports
-</div>
-
-<div class="card">
-Sony Sports
-</div>
-
-<div class="card">
-ESPN
-</div>
-
-</div>
-
-</section>
-
-<section class="section">
-
-<h2 class="section-title">
-🏆 FIFA 2026
-</h2>
-
-<div class="row">
-
-<div class="card">
-Argentina vs Brazil
-</div>
-
-<div class="card">
-France vs Germany
-</div>
-
-<div class="card">
-Highlights
-</div>
-
-</div>
-
-</section>
-
-<footer class="footer">
-
-© 2026 NHLiveZone
-
-</footer>
-
+// Sidebar active
+document.querySelectorAll('.nav-item').forEach(item=>{
+  item.addEventListener('click',e=>{
+    e.preventDefault();
+    document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
+    item.classList.add('active');
+  });
+});
+</script>
 </body>
 </html>
-<div class="player-controls">
-
-<button class="control-btn">
-⏯
-</button>
-
-<button class="control-btn">
-🔊
-</button>
-
-<input
-type="range"
-class="volume-slider"
-min="0"
-max="100"
-value="80">
-
-<div class="live-indicator">
-🔴 LIVE
-</div>
-
-<div class="spacer"></div>
-
-<select class="quality-select">
-
-<option>Auto</option>
-<option>1080p</option>
-<option>720p</option>
-<option>480p</option>
-
-</select>
-
-<button class="control-btn">
-📺
-</button>
-
-<button class="control-btn">
-⛶
-</button>
-
-</div>
-.player-controls{
-
-height:65px;
-
-background:#0f172a;
-
-display:flex;
-
-align-items:center;
-
-padding:0 15px;
-
-gap:12px;
-
-border-radius:0 0 18px 18px;
-
-}
-
-.control-btn{
-
-width:42px;
-height:42px;
-
-border:none;
-
-border-radius:10px;
-
-background:#1e293b;
-
-color:white;
-
-font-size:18px;
-
-cursor:pointer;
-
-transition:.3s;
-
-}
-
-.control-btn:hover{
-
-background:#2563eb;
-
-}
-
-.volume-slider{
-
-width:120px;
-
-accent-color:#2563eb;
-
-}
-
-.live-indicator{
-
-background:red;
-
-padding:6px 12px;
-
-border-radius:50px;
-
-font-size:12px;
-
-font-weight:700;
-
-}
-
-.spacer{
-
-flex:1;
-
-}
-
-.quality-select{
-
-height:40px;
-
-padding:0 12px;
-
-background:#1e293b;
-
-color:white;
-
-border:none;
-
-border-radius:10px;
-
-}
-⏯   🔊 ────────  🔴 LIVE              Auto ▼   📺   ⛶
-<link
-rel="stylesheet"
-href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-<i class="ti ti-player-play"></i>
-<i class="ti ti-volume"></i>
-<i class="ti ti-maximize"></i>
-<div class="schedule-panel">
-
-<div class="schedule-header">
-
-<h3>📅 Schedule</h3>
-
-<a href="#">View All</a>
-
-</div>
-
-<div class="schedule-list">
-
-<div class="schedule-item">
-
-<div class="time">
-10:00 AM
-</div>
-
-<div class="info">
-
-<h4>Bangladesh vs Sri Lanka</h4>
-
-<p>T Sports HD</p>
-
-</div>
-
-<span class="live-badge">
-LIVE
-</span>
-
-</div>
-
-<div class="schedule-item">
-
-<div class="time">
-01:30 PM
-</div>
-
-<div class="info">
-
-<h4>Premier League Highlights</h4>
-
-<p>Star Sports 1</p>
-
-</div>
-
-<span class="live-badge">
-LIVE
-</span>
-
-</div>
-
-<div class="schedule-item">
-
-<div class="time">
-04:00 PM
-</div>
-
-<div class="info">
-
-<h4>News at 4 PM</h4>
-
-<p>Jamuna TV</p>
-
-</div>
-
-<span class="live-badge">
-LIVE
-</span>
-
-</div>
-
-<div class="schedule-item">
-
-<div class="time">
-05:00 PM
-</div>
-
-<div class="info">
-
-<h4>Cricket Show</h4>
-
-<p>T Sports HD</p>
-
-</div>
-
-<span class="live-badge">
-LIVE
-</span>
-
-</div>
-
-</div>
-
-</div>
-.schedule-panel{
-
-background:#111827;
-
-border-radius:20px;
-
-padding:20px;
-
-height:100%;
-
-box-shadow:
-0 10px 30px rgba(0,0,0,.3);
-
-}
-
-.schedule-header{
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-margin-bottom:20px;
-
-}
-
-.schedule-header h3{
-
-font-size:22px;
-
-}
-
-.schedule-header a{
-
-color:#3b82f6;
-
-text-decoration:none;
-
-font-size:14px;
-
-}
-
-.schedule-list{
-
-display:flex;
-
-flex-direction:column;
-
-gap:15px;
-
-}
-
-.schedule-item{
-
-display:flex;
-
-align-items:center;
-
-gap:15px;
-
-padding:12px;
-
-background:#1e293b;
-
-border-radius:14px;
-
-transition:.3s;
-
-}
-
-.schedule-item:hover{
-
-background:#243247;
-
-transform:translateX(3px);
-
-}
-
-.time{
-
-width:70px;
-
-font-size:14px;
-
-font-weight:600;
-
-color:#cbd5e1;
-
-}
-
-.info{
-
-flex:1;
-
-}
-
-.info h4{
-
-font-size:15px;
-
-margin-bottom:4px;
-
-}
-
-.info p{
-
-font-size:13px;
-
-color:#94a3b8;
-
-}
-
-.live-badge{
-
-background:#ef4444;
-
-padding:5px 10px;
-
-border-radius:50px;
-
-font-size:11px;
-
-font-weight:700;
-
-color:white;
-
-}
-<section class="section">
-
-<h2 class="section-title">
-📺 Popular Channels
-</h2>
-
-<div class="channel-grid">
-
-<div class="channel-card">
-<img src="https://upload.wikimedia.org/wikipedia/en/5/5c/T_Sports_logo.png">
-<span>T Sports HD</span>
-</div>
-
-<div class="channel-card">
-<img src="https://upload.wikimedia.org/wikipedia/en/8/86/Jamuna_Television_Logo.svg">
-<span>Jamuna TV</span>
-</div>
-
-<div class="channel-card">
-<img src="https://upload.wikimedia.org/wikipedia/en/0/0d/Channel24_BD_logo.png">
-<span>Channel 24</span>
-</div>
-
-<div class="channel-card">
-<img src="https://upload.wikimedia.org/wikipedia/en/7/7c/Somoy_TV_logo.png">
-<span>Somoy TV</span>
-</div>
-
-</div>
-
-</section>
-.channel-grid{
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
-gap:15px;
-}
-
-.channel-card{
-background:#111827;
-padding:15px;
-border-radius:16px;
-text-align:center;
-transition:.3s;
-cursor:pointer;
-}
-
-.channel-card:hover{
-transform:translateY(-4px);
-border:1px solid #3b82f6;
-}
-
-.channel-card img{
-width:70px;
-height:70px;
-object-fit:contain;
-margin-bottom:10px;
-}
-<div class="categories-box">
-
-<div class="cat news">
-📰 News
-</div>
-
-<div class="cat sports">
-⚽ Sports
-</div>
-
-<div class="cat movies">
-🎬 Movies
-</div>
-
-<div class="cat kids">
-🧸 Kids
-</div>
-
-<div class="cat music">
-🎵 Music
-</div>
-
-<div class="cat doc">
-📷 Documentary
-</div>
-
-</div>
-.categories-box{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:15px;
-}
-
-.cat{
-padding:25px;
-border-radius:18px;
-text-align:center;
-font-weight:600;
-cursor:pointer;
-}
-
-.news{
-background:#2563eb;
-}
-
-.sports{
-background:#16a34a;
-}
-
-.movies{
-background:#9333ea;
-}
-
-.kids{
-background:#ec4899;
-}
-
-.music{
-background:#f59e0b;
-}
-
-.doc{
-background:#0891b2;
-}
-<div class="social-box">
-
-<h3>Stay Connected</h3>
-
-<div class="social-icons">
-
-<a href="#">📘</a>
-
-<a href="#">▶️</a>
-
-<a href="#">📸</a>
-
-<a href="#">🐦</a>
-
-</div>
-
-</div>
-.social-box{
-background:#111827;
-padding:20px;
-border-radius:18px;
-}
-
-.social-icons{
-display:flex;
-gap:15px;
-margin-top:15px;
-}
-
-.social-icons a{
-width:55px;
-height:55px;
-background:#1e293b;
-display:flex;
-align-items:center;
-justify-content:center;
-border-radius:50%;
-font-size:24px;
-text-decoration:none;
-}
-
-.social-icons a:hover{
-background:#3b82f6;
-}
-<section>
-
-<h2 class="section-title">
-🏆 FIFA 2026
-</h2>
-
-<div class="fifa-grid">
-
-<div class="fifa-card">
-🇦🇷 Argentina
-VS
-🇧🇷 Brazil
-<span>LIVE</span>
-</div>
-
-<div class="fifa-card">
-🇫🇷 France
-VS
-🇩🇪 Germany
-<span>LIVE</span>
-</div>
-
-<div class="fifa-card">
-🇵🇹 Portugal
-VS
-🏴 England
-<span>LIVE</span>
-</div>
-
-<div class="fifa-card">
-🇪🇸 Spain
-VS
-🇮🇹 Italy
-<span>LIVE</span>
-</div>
-
-</div>
-
-</section>
