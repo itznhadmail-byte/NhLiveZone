@@ -1,3 +1,9 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NhLiveZone</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Rajdhani:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css" />
@@ -100,23 +106,6 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
 
 .topbar-spacer{flex:1}
 
-.digital-clock{
-  display:flex;align-items:center;gap:8px;flex-shrink:0;
-}
-.clock-time{
-  font-family:'Rajdhani',sans-serif;
-  font-size:22px;font-weight:600;
-  background:linear-gradient(135deg,#5b9bff,#9bdcff);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  letter-spacing:.04em;line-height:1;
-}
-.clock-colon{animation:blink 1s step-end infinite;display:inline-block}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
-.clock-date{
-  font-size:10px;color:var(--text3);line-height:1.4;text-align:right;
-}
-.clock-day{font-size:11px;font-weight:600;color:var(--text2);display:block}
-
 .cat-row{display:flex;align-items:center;gap:5px;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none;width:100%}
 .cat-row::-webkit-scrollbar{display:none}
 
@@ -192,7 +181,18 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
 .no-ch i{font-size:20px;display:block;margin-bottom:7px;opacity:.4}
 
 /* ══════════════ PLAYER ══════════════ */
-.player-col{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden}
+.player-col{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden; background: var(--bg);}
+
+/* Fullscreen Specific CSS */
+.player-col:-webkit-full-screen { width:100vw; height:100vh; background:#000; display:flex; flex-direction:column; }
+.player-col:-ms-fullscreen { width:100vw; height:100vh; background:#000; display:flex; flex-direction:column; }
+.player-col:fullscreen { width:100vw; height:100vh; background:#000; display:flex; flex-direction:column; }
+.player-col:fullscreen .player-screen,
+.player-col:-webkit-full-screen .player-screen { max-height:none; height:100%; flex:1; aspect-ratio:auto; width:100%; }
+.player-col:fullscreen .now-bar,
+.player-col:-webkit-full-screen .now-bar { display:none !important; }
+.player-col:fullscreen .ctrl-bar,
+.player-col:-webkit-full-screen .ctrl-bar { flex-shrink:0; }
 
 .player-screen{
   width:100%;background:#020509;
@@ -200,7 +200,7 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
   position:relative;overflow:hidden;
   flex:0 0 auto;
   aspect-ratio:16/9;
-  max-height:55vh;
+  max-height:60vh;
 }
 .player-screen::before{
   content:'';position:absolute;inset:0;
@@ -242,6 +242,7 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
 
 .video-wrap{position:absolute;inset:0;display:none}
 .video-wrap video{width:100%;height:100%;object-fit:contain;background:#000}
+#vid{width:100%;height:100%;object-fit:contain;background:#000} /* fix: kalo bar/red mark bad dewar jonno */
 .screen-grad{position:absolute;inset:0;pointer-events:none;z-index:2;display:none;
   background:linear-gradient(to bottom,rgba(0,0,0,.4) 0%,transparent 25%,transparent 75%,rgba(0,0,0,.3) 100%)}
 .err-msg{
@@ -295,7 +296,8 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
 .qopt.active .check{opacity:1}
 
 .now-bar{
-  display:flex;align-items:center;gap:12px;
+  display:none !important;
+  align-items:center;gap:12px;
   padding:8px 14px;border-top:1px solid var(--border);
   background:var(--bg2);flex-wrap:wrap;flex-shrink:0;
 }
@@ -324,181 +326,6 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
 .vol-row input{width:68px;accent-color:var(--accent)}
 .divider{width:1px;height:20px;background:var(--border);flex-shrink:0}
 
-.player-bottom-area {
-  display: flex;
-  gap: 16px;
-  padding: 16px;
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  background: var(--bg);
-}
-.bottom-left {
-  flex: 1.6;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  min-width: 0;
-}
-.bottom-right {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-width: 280px;
-}
-.info-card, .schedule-card, .chat-card {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px;
-}
-.info-heading {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text);
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.info-heading i {
-  color: var(--accent);
-}
-#channel-desc {
-  font-size: 12.5px;
-  color: var(--text2);
-  line-height: 1.5;
-}
-.schedule-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.epg-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 12px;
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  gap: 10px;
-}
-.epg-item.active {
-  border-color: rgba(79, 125, 240, 0.3);
-  background: rgba(79, 125, 240, 0.05);
-}
-.epg-time {
-  font-size: 11px;
-  color: var(--text3);
-  font-weight: 500;
-  white-space: nowrap;
-}
-.epg-title {
-  font-size: 12.5px;
-  color: var(--text);
-  flex: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.epg-status {
-  font-size: 10px;
-  font-weight: 600;
-  color: var(--green);
-  background: rgba(74, 222, 128, 0.1);
-  padding: 2px 6px;
-  border-radius: 4px;
-}
-
-.chat-card {
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  min-height: 250px;
-  overflow: hidden;
-}
-.chat-header {
-  padding: 12px 14px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--bg3);
-}
-.chat-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.chat-title i { color: var(--accent2); }
-.chat-count {
-  font-size: 11px;
-  color: var(--text2);
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-.chat-messages {
-  flex: 1;
-  padding: 12px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.chat-msg {
-  font-size: 12px;
-  line-height: 1.4;
-}
-.chat-user {
-  font-weight: 600;
-  margin-right: 4px;
-}
-.chat-text {
-  color: var(--text2);
-}
-.chat-input-wrap {
-  padding: 10px;
-  border-top: 1px solid var(--border);
-  display: flex;
-  gap: 8px;
-  background: var(--bg3);
-}
-.chat-input-wrap input {
-  flex: 1;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xs);
-  padding: 8px 12px;
-  color: var(--text);
-  font-size: 12px;
-  outline: none;
-}
-.chat-input-wrap input:focus {
-  border-color: var(--accent);
-}
-.chat-input-wrap button {
-  background: var(--accent);
-  border: none;
-  color: white;
-  width: 32px;
-  height: 32px;
-  border-radius: var(--radius-xs);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s;
-}
-.chat-input-wrap button:hover {
-  background: #3b66c4;
-}
-
 .footer{
   display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
   padding:8px 16px;border-top:1px solid var(--border);background:var(--bg2);flex-shrink:0;
@@ -516,9 +343,6 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
   .topbar{padding:8px 12px;gap:6px}
   .topbar-search{width:100%;max-width:none;order:3;flex-basis:calc(100% - 0px)}
   .cat-row{order:4;width:100%;flex-basis:100%}
-  .digital-clock{order:2;margin-left:auto}
-  .clock-time{font-size:18px}
-  .clock-date{display:none}
 
   .sidebar{
     width:100%;min-width:0;border-right:none;border-bottom:1px solid var(--border);
@@ -548,24 +372,12 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
   .divider{display:none}
   .ctrl-bar{gap:8px;padding:7px 10px}
   
-  .player-bottom-area {
-    flex-direction: column;
-    overflow: visible;
-    padding: 12px;
-  }
-  .bottom-right {
-    min-width: 0;
-  }
-  .chat-card {
-    height: 300px;
-  }
-  
   .footer{padding:7px 12px;flex-direction:column;align-items:flex-start;gap:3px}
 }
 </style>
-
+</head>
+<body>
 <div class="tv-app">
-  <!-- TOP BAR -->
   <div class="topbar">
     <div class="brand">
       <div class="brand-svg">
@@ -597,25 +409,13 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
 
     <div class="topbar-spacer"></div>
 
-    <!-- Clock -->
-    <div class="digital-clock">
-      <div>
-        <div class="clock-time" id="clock-time">00<span class="clock-colon">:</span>00<span class="clock-colon">:</span>00</div>
-        <div class="clock-date" id="clock-date"><span class="clock-day" id="clock-day">Mon</span><span id="clock-dmy">01 Jan 2026</span></div>
-      </div>
-    </div>
-
-    <!-- Categories container -->
     <div class="cat-row" id="cats"></div>
   </div>
 
-  <!-- MAIN BODY -->
   <div class="body">
-    <!-- SIDEBAR -->
     <div class="sidebar" id="sidebar"></div>
 
-    <!-- PLAYER AREA -->
-    <div class="player-col">
+    <div class="player-col" id="player-wrapper">
       <div class="player-screen" id="screen">
         <div class="screen-grad" id="screen-grad"></div>
         <div class="player-tl" id="ptl" style="display:none">
@@ -624,7 +424,6 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
         </div>
         <div class="quality-badge" id="quality-badge">AUTO</div>
 
-        <!-- Idle View -->
         <div class="idle-state" id="idle">
           <div class="idle-logo-wrap">
             <svg viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -646,21 +445,18 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
           <div class="idle-sub">Select a channel to start watching</div>
         </div>
 
-        <!-- Loading View -->
         <div class="loading-state" id="loading">
           <img id="loading-logo" class="loading-logo" src="" alt="" style="display:none"/>
           <div class="spinner"></div>
           <span class="loading-ch" id="loading-ch">Loading…</span>
         </div>
 
-        <!-- Video Wrapper -->
-        <div class="video-wrap" id="vwrap"><video id="vid"></video></div>
+        <div class="video-wrap" id="vwrap"><video id="vid" playsinline></video></div>
         <div class="err-msg" id="errmsg"></div>
       </div>
 
       <div class="pbar-wrap"><div class="pbar-fill" id="pbar"></div></div>
 
-      <!-- CONTROLS -->
       <div class="ctrl-bar">
         <button class="ctrl-btn" onclick="seekBack()" title="Restart / Reload">
           <i class="ti ti-player-skip-back"></i>
@@ -674,7 +470,6 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
 
         <div style="flex:1"></div>
 
-        <!-- Quality menu -->
         <div class="quality-wrap" id="qwrap">
           <button class="ctrl-btn" onclick="toggleQMenu()" id="qbtn" style="width:auto;border-radius:6px;padding:0 10px;gap:5px;font-size:11px;font-weight:600;color:var(--text2)">
             <i class="ti ti-settings" style="font-size:14px"></i>
@@ -692,12 +487,11 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
         <button class="ctrl-btn" id="mutebtn2" onclick="toggleMute()" title="Mute">
           <i class="ti ti-volume"></i>
         </button>
-        <button class="ctrl-btn" onclick="doFS()" title="Fullscreen">
+        <button class="ctrl-btn" id="fs-btn" onclick="doFS()" title="Fullscreen">
           <i class="ti ti-maximize"></i>
         </button>
       </div>
 
-      <!-- NOW BAR -->
       <div class="now-bar">
         <div class="now-brand">
           <div class="now-logo" id="now-logo-wrap"><span>Nh</span></div>
@@ -717,65 +511,29 @@ html,body{height:100%;background:var(--bg);overflow:hidden}
           </button>
         </div>
       </div>
-
-      <!-- BOTTOM DATA AREA -->
-      <div class="player-bottom-area">
-        <div class="bottom-left">
-          <div class="info-card">
-            <h3 class="info-heading"><i class="ti ti-info-circle"></i> Channel Overview</h3>
-            <p id="channel-desc">Welcome to NHLiveZone. Select a channel from the sidebar to view live streaming and information schedule.</p>
-          </div>
-
-          <div class="schedule-card">
-            <h3 class="info-heading"><i class="ti ti-calendar-time"></i> Today's Schedule (EPG)</h3>
-            <div class="schedule-list" id="epg-list">
-              <div class="epg-item active">
-                <span class="epg-time">10:00 PM - 11:30 PM</span>
-                <span class="epg-title" id="epg-now">বাজেটের রাজনীতি (Talk Show)</span>
-                <span class="epg-status">LIVE NOW</span>
-              </div>
-              <div class="epg-item">
-                <span class="epg-time">11:30 PM - 12:30 AM</span>
-                <span class="epg-title">রাতের প্রধান সংবাদ (Nightly News)</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="bottom-right">
-          <div class="chat-card">
-            <div class="chat-header">
-              <span class="chat-title"><i class="ti ti-messages"></i> Stream Chat</span>
-              <span class="chat-count"><span class="pulse"></span> 1.2K Online</span>
-            </div>
-            <div class="chat-messages" id="chat-box">
-              <div class="chat-msg"><span class="chat-user" style="color: #5b9bff;">Sabbir:</span><span class="chat-text">Stream quality khub e valo! 🔥</span></div>
-              <div class="chat-msg"><span class="chat-user" style="color: #ffd700;">Rana:</span><span class="chat-text">Buffer charai choltese, thanks admin! ❤️</span></div>
-            </div>
-            <div class="chat-input-wrap">
-              <input type="text" id="chat-input" placeholder="Type a message..." onkeypress="handleChatKey(event)">
-              <button onclick="sendChat()"><i class="ti ti-send"></i></button>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 
-  <!-- FOOTER -->
   <div class="footer">
     <div class="footer-privacy">🔒 We do not collect or share your personal data.</div>
-    <div class="footer-copy">© 2026 NHLiveZone · Made with ❤️ by <a href="https://www.facebook.com/iamnhrana" target="_blank" rel="noopener">NhZone</a></div>
+    <div class="footer-copy">© 2026 NhLiveZone · Made with ❤️ by <a href="https://www.facebook.com/iamnhrana" target="_blank" rel="noopener">NhZone</a></div>
   </div>
 </div>
 
-<!-- EXTERNAL JAVASCRIPT LIBS -->
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.7/dist/hls.min.js"></script>
 <script>
 /* ── DATA ── */
 const channels=[
-  {id:103,name:"Sony SAB",cat:"FIFA 2026",sub:"Entertainment",logo:"https://upload.wikimedia.org/wikipedia/commons/b/b2/Sony_SAB_2022.png",url:"http://172.27.27.3:801/16_SonySAB/index.m3u8",fifa:true},
+  {id:103,name:"T Sports",cat:"FIFA 2026",sub:"Entertainment",logo:"https://upload.wikimedia.org/wikipedia/commons/b/b2/Sony_SAB_2022.png",url:"http://172.27.27.3:801/16_SonySAB/index.m3u8",fifa:true},
   {id:104,name:"Star Sports 1",cat:"FIFA 2026",sub:"Sports",logo:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Star_Sports_1.svg/512px-Star_Sports_1.svg.png",url:"http://172.27.27.3:801/07_StarSports1/index.m3u8",fifa:true},
+  {id:200,name:"DSPORTS",cat:"FIFA 2026",sub:"Sports",logo:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeYlfQg4HXMdswfyTrb6iKdSndj0xCsJKTD6MGfooCdnpvLiSVOPSctiI&s=10",url:"https://1nyaler.streamhostingcdn.top/stream/106/index.m3u8",fifa:true},
+  {id:201,name:"Bein Sports",cat:"FIFA 2026",sub:"Sports",logo:"https://play-lh.googleusercontent.com/zFPHigI8l5v42ToIW88GatyY49SC4ohu_8lJcIFIz2GGqevVeSsNS41K_EARp1oJcYOwrSgQmiFq0JrhbbmqFw",url:"https://1nyaler.streamhostingcdn.top/stream/23/index.m3u8",fifa:true},
+  {id:202,name:"Fifa+",cat:"FIFA 2026",sub:"Sports",logo:"https://cdn-1.webcatalog.io/catalog/fifa-plus/fifa-plus-icon-filled-256.png?v=1714774340917",url:"https://c822c659.wurl.com/manifest/f36d25e7e52f1ba8d7e56eb859c636563214f541/U2Ftc3VuZy1pbl9GSUZBUGx1c0VuZ2xpc2hfSExT/a4288c44-0852-418a-874a-6068c1f660a7/2.m3u8",fifa:true},
+  {id:203,name:"DD Sports",cat:"FIFA 2026",sub:"Sports",logo:"https://s3.aynaott.com/storage/188500190395c4de0e506d518925dcc4",url:"https://cdn-6.pishow.tv/live/13/master.m3u8",fifa:true},
+  {id:204,name:"KTV Sport Plus",cat:"FIFA 2026",sub:"Sports",logo:"https://s3.aynaott.com/storage/b54495ee3cdd53ddaa19d1f98120f488",url:"https://kwtsplta.cdn.mangomolo.com/spl/smil:spl.stream.smil/chunklist.m3u8",fifa:true},
+  {id:205,name:"Oman Sports TV",cat:"FIFA 2026",sub:"Sports",logo:"https://s3.aynaott.com/storage/33f87783637fc95fdb8837ba9344c9e9",url:"https://partneta.cdn.mgmlcdn.com/omsport/smil:omsport.stream.smil/chunklist.m3u8",fifa:true},
+  {id:206,name:"Bleav Football",cat:"FIFA 2026",sub:"Sports",logo:"https://s3.aynaott.com/storage/030ec528e912afb9a2ec3b4c5167a928",url:"https://linear-493.frequency.stream/dist/glewedtv/493/hls/master/playlist.m3u8",fifa:true},
+  {id:207,name:"Bein Tv",cat:"FIFA 2026",sub:"Sports",logo:"https://static.epg.best/qa/beINSports1.qa.png",url:"https://bein-esp-xumo.amagi.tv/playlistR1080p.m3u8",fifa:true},
   {id:1,name:"Jamuna TV",cat:"Bangladesh",sub:"News",logo:"https://tstatic.akash-go.com/cms-ui/images/custom-content/1735560213832.png",url:"https://owrcovcrpy.gpcdn.net/bpk-tv/1701/output/index.m3u8"},
   {id:2,name:"DBC News HD",cat:"Bangladesh",sub:"News",logo:"https://tstatic.akash-go.com/cms-ui/images/custom-content/1770186306600.png",url:"https://owrcovcrpy.gpcdn.net/bpk-tv/1728/output/index.m3u8"},
   {id:3,name:"Maasranga TV",cat:"Bangladesh",sub:"Entertainment",logo:"https://tstatic.akash-go.com/cms-ui/images/custom-content/1773680325498.png",url:"https://owrcovcrpy.gpcdn.net/bpk-tv/1722/output/index.m3u8"},
@@ -800,7 +558,15 @@ const channels=[
   {id:22,name:"CNN",cat:"International",sub:"News",abbr:"CNN",bg:"#4a2a1f",txt:"#ffcdb8",url:null},
   {id:23,name:"T Sports",cat:"Sports",sub:"Sports",abbr:"TSP",bg:"#1f3a30",txt:"#9be3c4",url:null},
   {id:24,name:"Star Sports 1",cat:"Sports",sub:"Sports",abbr:"SS1",bg:"#1d3f56",txt:"#cdeaff",url:null},
-  {id:25,name:"ESPN",cat:"Sports",sub:"Sports",abbr:"ESPN",bg:"#4a1f1f",txt:"#ffc3c3",url:null}
+  {id:25,name:"ESPN",cat:"Sports",sub:"Sports",abbr:"ESPN",bg:"#4a1f1f",txt:"#ffc3c3",url:null},
+  {id:220,name:"DSPORTS",cat:"Sports",sub:"Sports",logo:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeYlfQg4HXMdswfyTrb6iKdSndj0xCsJKTD6MGfooCdnpvLiSVOPSctiI&s=10",url:"https://1nyaler.streamhostingcdn.top/stream/106/index.m3u8"},
+  {id:221,name:"Bein Sports",cat:"Sports",sub:"Sports",logo:"https://play-lh.googleusercontent.com/zFPHigI8l5v42ToIW88GatyY49SC4ohu_8lJcIFIz2GGqevVeSsNS41K_EARp1oJcYOwrSgQmiFq0JrhbbmqFw",url:"https://1nyaler.streamhostingcdn.top/stream/23/index.m3u8"},
+  {id:222,name:"Fifa+",cat:"Sports",sub:"Sports",logo:"https://cdn-1.webcatalog.io/catalog/fifa-plus/fifa-plus-icon-filled-256.png?v=1714774340917",url:"https://c822c659.wurl.com/manifest/f36d25e7e52f1ba8d7e56eb859c636563214f541/U2Ftc3VuZy1pbl9GSUZBUGx1c0VuZ2xpc2hfSExT/a4288c44-0852-418a-874a-6068c1f660a7/2.m3u8"},
+  {id:223,name:"DD Sports",cat:"Sports",sub:"Sports",logo:"https://s3.aynaott.com/storage/188500190395c4de0e506d518925dcc4",url:"https://cdn-6.pishow.tv/live/13/master.m3u8"},
+  {id:224,name:"KTV Sport Plus",cat:"Sports",sub:"Sports",logo:"https://s3.aynaott.com/storage/b54495ee3cdd53ddaa19d1f98120f488",url:"https://kwtsplta.cdn.mangomolo.com/spl/smil:spl.stream.smil/chunklist.m3u8"},
+  {id:225,name:"Oman Sports TV",cat:"Sports",sub:"Sports",logo:"https://s3.aynaott.com/storage/33f87783637fc95fdb8837ba9344c9e9",url:"https://partneta.cdn.mgmlcdn.com/omsport/smil:omsport.stream.smil/chunklist.m3u8"},
+  {id:226,name:"Bleav Football",cat:"Sports",sub:"Sports",logo:"https://s3.aynaott.com/storage/030ec528e912afb9a2ec3b4c5167a928",url:"https://linear-493.frequency.stream/dist/glewedtv/493/hls/master/playlist.m3u8"},
+  {id:227,name:"Bein Tv",cat:"Sports",sub:"Sports",logo:"https://static.epg.best/qa/beINSports1.qa.png",url:"https://bein-esp-xumo.amagi.tv/playlistR1080p.m3u8"}
 ];
 
 const catCfg={
@@ -816,26 +582,6 @@ const tagCls={"Bangladesh":"#5b9bff","Indian":"#f0b440","International":"#4fd0e8
 
 let activeCat="FIFA 2026",activeId=null,searchQ="",hlsInst=null,isPlaying=false,currentQuality="auto";
 const isMobile=()=>window.innerWidth<=680;
-
-/* ── CLOCK ── */
-function updateClock(){
-  const now=new Date();
-  const h=String(now.getHours()).padStart(2,'0');
-  const m=String(now.getMinutes()).padStart(2,'0');
-  const s=String(now.getSeconds()).padStart(2,'0');
-  const el = document.getElementById("clock-time");
-  if(el) el.innerHTML=`${h}<span class="clock-colon">:</span>${m}<span class="clock-colon">:</span>${s}`;
-  
-  const days=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-  const months=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-  const d=now.getDate(); const mo=months[now.getMonth()]; const y=now.getFullYear();
-  
-  const dEl = document.getElementById("clock-day");
-  const dmyEl = document.getElementById("clock-dmy");
-  if(dEl) dEl.textContent=days[now.getDay()]+" ";
-  if(dmyEl) dmyEl.textContent=`${String(d).padStart(2,'0')} ${mo} ${y}`;
-}
-setInterval(updateClock,1000);
 
 /* ── BUILD CATS ── */
 function buildCats(){
@@ -944,8 +690,6 @@ function stopStream(){
   document.getElementById("quality-badge").style.display="none";
   document.getElementById("prog-t").textContent="NHLiveZone";
   document.getElementById("prog-s").textContent="Select a channel to start";
-  document.getElementById("channel-desc").textContent="Welcome to NHLiveZone. Select a channel from the sidebar to view live streaming and information schedule.";
-  document.getElementById("epg-now").textContent="No channel playing";
   document.getElementById("pbar").style.width="0%";
   setPlayIcon(false);
   const nl=document.getElementById("now-logo-wrap");
@@ -979,8 +723,6 @@ function selectAndPlay(id,force=false){
   document.getElementById("ch-now").textContent=ch.name;
   document.getElementById("prog-t").textContent=ch.name;
   document.getElementById("prog-s").textContent=ch.cat+" · "+ch.sub;
-  document.getElementById("channel-desc").textContent=`You are currently watching ${ch.name} (${ch.sub}). Streamed live in high definition via NHLiveZone platform.`;
-  document.getElementById("epg-now").textContent=`${ch.name} Live Broadcast / Special Stream`;
 
   const tag=document.getElementById("live-tag");
   tag.style.background=tagCls[ch.cat]||"#5b9bff";
@@ -1069,11 +811,42 @@ function setQuality(q){
   }
 }
 
+/* ── FULLSCREEN FIX ── */
 function doFS(){
-  const el=document.getElementById("screen");
-  if(!document.fullscreenElement)el.requestFullscreen&&el.requestFullscreen();
-  else document.exitFullscreen&&document.exitFullscreen();
+  const el = document.getElementById("player-wrapper");
+  
+  if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+    if (el.requestFullscreen) {
+      el.requestFullscreen();
+    } else if (el.webkitRequestFullscreen) { /* Safari */
+      el.webkitRequestFullscreen();
+    } else if (el.msRequestFullscreen) { /* IE11 */
+      el.msRequestFullscreen();
+    }
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) { /* Safari */
+      document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) { /* IE11 */
+      document.msExitFullscreen();
+    }
+  }
 }
+
+// Update fullscreen icon on state change
+function updateFsIcon() {
+  const icon = document.querySelector('#fs-btn i');
+  if(!icon) return;
+  if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+    icon.className = "ti ti-maximize";
+  } else {
+    icon.className = "ti ti-minimize";
+  }
+}
+document.addEventListener('fullscreenchange', updateFsIcon);
+document.addEventListener('webkitfullscreenchange', updateFsIcon);
+
 function toggleMute(){
   const v=document.getElementById("vid");v.muted=!v.muted;
   const ico=v.muted?'<i class="ti ti-volume-off"></i>':'<i class="ti ti-volume"></i>';
@@ -1082,28 +855,14 @@ function toggleMute(){
 }
 function setVol(val){ const v=document.getElementById("vid"); if(v){v.volume=val/100; v.muted=val==0;} }
 
-/* ── CHAT ── */
-function handleChatKey(e) { if (e.key === 'Enter') sendChat(); }
-function sendChat() {
-  const inp = document.getElementById("chat-input");
-  const text = inp.value.trim();
-  if (!text) return;
-  const box = document.getElementById("chat-box");
-  const msg = document.createElement("div");
-  msg.className = "chat-msg";
-  msg.innerHTML = `<span class="chat-user" style="color: #7c5cf0;">You:</span><span class="chat-text">${text}</span>`;
-  box.appendChild(msg);
-  inp.value = "";
-  box.scrollTop = box.scrollHeight;
-}
-
 /* ── INITIALIZATION ── */
 let lastMobile=isMobile();
 window.addEventListener("resize",()=>{const m=isMobile();if(m!==lastMobile){lastMobile=m;renderSidebar();}});
 
 window.addEventListener("DOMContentLoaded", () => {
-  updateClock();
   buildCats();
   renderSidebar();
 });
 </script>
+</body>
+</html>
